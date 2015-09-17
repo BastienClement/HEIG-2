@@ -9,6 +9,7 @@
 #define	GRAPHFROMIMAGE_H
 
 #include <list>
+#include <vector>
 
 #include "bitmap_image.hpp"
 
@@ -28,6 +29,7 @@ public:
     
 private:
     const bitmap_image& image;
+    std::vector<Iterable> adjacents;
 };
 
 #endif	/* GRAPHFROMIMAGE_H */
