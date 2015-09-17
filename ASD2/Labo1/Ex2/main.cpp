@@ -14,6 +14,7 @@
 #include <sstream>
 #include <limits>
 #include <cstdlib>
+#include <time.h>
 
 using namespace std;
 
