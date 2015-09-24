@@ -1,0 +1,60 @@
+---
+title: "Labo1"
+author: "Bastien Clément"
+date: "22 septembre 2015"
+output: pdf_document
+---
+
+Exercice 1
+==========
+
+Définition du répertoire de travail pour simplifier l'ouverture des fichiers
+
+```{r}
+setwd("~/github/HEIG-2/PST/TP1")
+```
+
+Chargement des données
+
+```{r}
+cpus <- scan("cpus.txt")
+examen <- read.table("examen.txt", header=T)
+algae <- read.table("algae.txt", header=T)
+```
+
+Vecteur / Liste
+---------------
+
+Contenu de `cpus`
+
+```{r}
+cpus
+```
+
+Accès direct à un élément ou à une plage de valeurs du vecteur
+
+```{r}
+cpus[7]
+cpus[3:9]
+```
+
+Filtrer
+
+```{r}
+cpus[cpus > 185]
+```
+
+Table
+-----
+
+```{r}
+examen
+```
+
+Accès à une colonne de la table (+ accès en profondeur)
+
+```{r}
+examen$note
+examen$note[5]
+```
+
