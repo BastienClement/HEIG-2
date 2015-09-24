@@ -5,6 +5,13 @@
  * Created on 2 oct. 2014, 11:19:03
  */
 
+/*
+ * Labo 01 par
+ *  Bastien Clément
+ *  Alain Hardy
+ */
+
+
 #include <stdlib.h>
 #include <iostream>
 
@@ -26,7 +33,11 @@ int main(int argc, char** argv) {
     GraphFromImage G(image);
     DFS<GraphFromImage> dfs(G);
 
-    //Question BONUS: Pourquoi n'utilisons-nous pas la methode visite pour parcourir l'image ?
+    // Question BONUS: Pourquoi n'utilisons-nous pas la methode visite pour parcourir l'image ?
+    //
+    // À l'inverse de la fonction visit() qui est recursive, la fonction iterativeVisit() utilise une pile
+    // dont les données sont placées sur le tas. Elle n'a donc pas de risque de causer un stack overflow avec
+    // trop de niveau de recursion.
     
     //on colore la carotte
     int x = 250, y = 400;
