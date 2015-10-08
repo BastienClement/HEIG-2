@@ -54,15 +54,20 @@ bool checkOrder(const std::vector<int>& order,
 
 int main(int argc, const char * argv[]) {
 
-    SymbolGraph<DiGraph> SG("prerequis.txt", ',');
+    try {
+        SymbolGraph<DiGraph> SG("prerequis2.txt", ',');
+        TopologicalSort<DiGraph> TS(SG.G());
+        for (auto i : TS.Order()) {
+            cout << SG.name(i) << " ";
+        }
+    } catch (const char* s) {
+        cerr << s << endl;
+    }
 
-    DirectedCycle<DiGraph> dc(SG.G());
-    cout << dc.HasCycle() << endl;
-
-    for (auto item : dc.Cycle()) {
+    /*for (auto item : dc.Cycle()) {
         cout << SG.name(item) << " > ";
     }
-    cout << SG.name(dc.Cycle().front());
+    cout << SG.name(dc.Cycle().front());*/
 
     return EXIT_SUCCESS;
 }

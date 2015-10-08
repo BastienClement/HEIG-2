@@ -43,6 +43,8 @@ public:
         std::ifstream s(filename);
         while (std::getline(s, line))
         {
+            if (line[line.size() - 1] == '\r')
+                line = line.substr(0, line.size() - 1);
             auto names = split(line, sep);
             for( auto name : names )
                 if(!contains(name))
@@ -60,6 +62,8 @@ public:
         s.open(filename);
         while (std::getline(s, line))
         {
+            if (line[line.size() - 1] == '\r')
+                line = line.substr(0, line.size() - 1);
             auto names = split(line, sep);
 
             int v = symbolTable[names[0]];

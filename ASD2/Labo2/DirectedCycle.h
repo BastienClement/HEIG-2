@@ -13,6 +13,7 @@
 #include <vector>
 #include <stack>
 #include <list>
+#include <iostream>
 
 using namespace std;
 
@@ -20,40 +21,42 @@ template<typename GraphType>
 class DirectedCycle {
 private:
 	bool hasCycle;
+	vector<bool> marked;
+	vector<bool> stacked;
+	stack<int> vstack;
 	list<int> cycle;
+
+	void DetectCycle(const GraphType& g, int v) {
+		marked.at(v) = true;
+		stacked.at(v) = true;
+		vstack.push(v);
+
+		for (int w : g.adjacent(v)) {
+			if (hasCycle) {
+				return;
+			} else if (!marked.at(w)) {
+				DetectCycle(g, w);
+			} else if (stacked.at(w)) {
+				hasCycle = true;
+				int a;
+				do {
+					a = vstack.top();
+					vstack.pop();
+					cycle.push_front(a);
+				} while (a != w);
+			}
+		}
+
+		if (hasCycle) return;
+
+		stacked.at(v) = false;
+		vstack.pop();
+	}
 	
 public:
 	//constructeur
-	DirectedCycle(const GraphType& g) {
-		hasCycle = false;
-		vector<bool> visited(g.V(), false);
-		stack<int> s;
-
-		for (int i = 0; i < g.V() && !hasCycle; i++) {
-			if (visited.at(i)) continue;
-			s.push(i);
-
-			while (!s.empty()) {
-				int v = s.top();
-				s.pop();
-
-				cycle.push_back(v);
-
-				if (visited.at(v)) {
-					hasCycle = true;
-					break;
-				} else {
-					visited.at(v) = true;
-				}
-
-				for (auto a : g.adjacent(v)) {
-					s.push(a);
-				}
-			}
-
-			break;
-		}
-
+	DirectedCycle(const GraphType& g): marked(g.V(), false), stacked(g.V(), false), hasCycle(false) {
+		DetectCycle(g, 0);
 	}
 	
 	//indique la presence d'un cycle
