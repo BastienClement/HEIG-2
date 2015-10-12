@@ -54,20 +54,22 @@ bool checkOrder(const std::vector<int>& order,
 
 int main(int argc, const char * argv[]) {
 
+    string filename = "prerequis.txt";
+    SymbolGraph<DiGraph> SG(filename, ',');
     try {
-        SymbolGraph<DiGraph> SG("prerequis2.txt", ',');
         TopologicalSort<DiGraph> TS(SG.G());
+        cout << filename << " est un DAG" << endl
+             << "Ordre topologique : " << endl;
         for (auto i : TS.Order()) {
             cout << SG.name(i) << " ";
         }
-    } catch (const char* s) {
-        cerr << s << endl;
+        cout << endl << "Verification reussie" << endl;
+    } catch (DirectedCycle<DiGraph> cycle) {
+        cout << filename << " n'est pas un DAG" << endl
+             << "Cycle trouve : " << endl;
+        for (auto i : cycle.Cycle())
+            cout << SG.name(i) << " ";
     }
-
-    /*for (auto item : dc.Cycle()) {
-        cout << SG.name(item) << " > ";
-    }
-    cout << SG.name(dc.Cycle().front());*/
 
     return EXIT_SUCCESS;
 }
