@@ -1,0 +1,39 @@
+---
+title: "TP2"
+author: "Bastien Clément"
+date: "30 septembre 2015"
+output: pdf_document
+---
+
+Exercice 1
+==========
+
+```{r collapse=T}
+#install.packages("lattice")
+library(lattice)
+
+data(Titanic)
+
+titanic.bar <- barchart(
+	Class~Freq|Sex+Age, data = as.data.frame(Titanic),
+	groups = Survived, stack = T, layout = c(4,1), 
+	auto.key = list(title = "Survived", columns = 2)
+)
+
+print(titanic.bar)
+```
+
+Exercice 2
+==========
+
+Il s'agit ici d'estimer la valeur de 
+
+Pour le graphique de gauche, au alentours de 0.9, proche de 1. Quantifie la linéarité, linéartié bien marquée et positive. En ragardant la pente des moindres carrés que l'ont peut tracer on aurait une droit avec une pente positive.
+
+Pour le point 4, clairement -1 puisque l'on a à nouveau une corélation bien marquée. mais dans ce cas ce que l'ont aurait obtenu avec les moindres carré aurait une pente négative.
+
+Ce n'est pas parce que la pente est forte ou faible que le coéficient de linéarité sera grand ou petit. Il ne c
+
+Point II: 0. Points quaisment uniformémant distribués. Interrsant dans le domaine phamraceutique, si on a les dose et les effets, cela signifie qu'il n'y a pas d'effet du médicament. On peut modifier les doses sans modifiers les effets.
+
+Pour le 3: 0. Il y a clairement un signal quadratique. Or le coefficient de coréalation est spcéialisé dans la linéarité. La droite des moindres carrés aurait passé plus ou moins au millieu. Il n'y a pas de linéarité. Compensation, linéarité marquée d'un côté, et de l'autre mais opposée.

@@ -1,3 +1,8 @@
 .idea
 .Rproj.user
 *.iml
+*.class
+.RData
+.Rhistory
+/PST/*/*.pdf
+*.Rproj

@@ -58,3 +58,63 @@ examen$note
 examen$note[5]
 ```
 
+Exercice 4
+==========
+
+```{r}
+library(ggplot2)
+```
+
+Modification de l'ordre d'apparition des quatre saisons dans l'ordre qui est le plus naturel pour nous.
+```{r}
+algae$season<-factor(algae$season, levels=c("spring", "summer", "autumn", "winter"))
+```
+
+```{r}
+p<-qplot(factor(season), mxPH, data=algae, geom="boxplot", xlab="season")
+pg<-p + geom_boxplot(aes(fill=factor(season)), outlier.colour="blue", outlier.size=3)
+print(pg)
+```
+
+C'est en automne qu'on observe la boite la plus épaisse, c'est donc en automne qu'on a la plus grande dispersion des données.
+
+On remarque que quelque soit la saison, les boites sont plutôt aux alentours de
+
+Entre les quatres saisons, il n'y a pas beaucoup de différences entres les médiannes. Il y en a forcément une, mais elle n'est pas significative.
+
+Analyse statistique
+-----------
+
+C'est en hivers qu'on a la valeur la plus élevée (autour de 9.7), on peut le voir de façon graphique, mais si l'on avait 32 saisons, cela ne serait pas très pratique. Il est généralement plus rapide d'utiliser des commandes de R.
+
+Dans ce cas la commande `max`
+
+```{r}
+nx <- tapply(algae$mxPH, algae$season, max, na.rm=T)
+max(nx)
+names(nx)[nx==max(nx)]
+```
+
+La première commande fabirque un vecteur avec plusieurs valeurs, les maximums pour les différentes saisons.
+Elle a appliqué exactement la même fonction à la même variable.
+
+On peut observer directement plus grand des max vaut `9.70` et a été enregisté en hivers.
+
+Dans le cas où les données seraient consiédrablement plus volumineuse, on peut utiliser la fonction `max` pour obtenir la plus grande valeur puis la fonction `names` pour obtenir le nom de la saison correspondante.
+
+Idem pour le plus petit écart-type:
+
+```{r}
+nx <- tapply(algae$mxPH, algae$season, sd, na.rm=T)
+min(nx)
+names(nx)[nx==min(nx)]
+```
+
+
+```{r}
+nx <- aggregate(mxPH~season, algae, IQR, na.rm=T)
+min(nx[,2])
+nx[,1][nx[,2] == min(nx[,2])]
+```
+
+À l'inverse de la commande `tapply`, la commande `aggregate` fabrique des tables de valeurs et non des vecteurs.
