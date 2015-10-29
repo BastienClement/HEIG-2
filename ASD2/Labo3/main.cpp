@@ -51,9 +51,6 @@ void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& r
         cout << rn.cities.at(currentNode).name ;
         currentNode = parent.at(currentNode);
     }
-
-
-
 }
 
 // Calcule et affiche le plus rapide chemin de la ville depart a la ville arrivee via la ville "via"
