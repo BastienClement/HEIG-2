@@ -8,7 +8,9 @@ output: pdf_document
 Exercice 1
 ==========
 
-```{r collapse=T}
+Ce premier exercice utilise un ensemble de données sur les passagers du Titanic contenu dans la librairie `lattice`. Puisqu'il n'est nécessaire d'installer cette bilbiothèque qu'une fois, la première ligne doit être commentée pour que le rapport puisse être généré.
+
+```{r}
 #install.packages("lattice")
 library(lattice)
 
@@ -23,17 +25,136 @@ titanic.bar <- barchart(
 print(titanic.bar)
 ```
 
+Après avoir chargé la bibliothèque `latice` et importé l'objet `Titanic`, nous avons créé un graphique avec la commande `barchart`.
+
+Ce graphique un peu particulier est conditionné selon la tranche d'âge des passagers et leur sexe. Ces informations sont lues selon l'axe horizontale. Sur l'axe vertical, nous pouvons distinguer la classe (1er, 2ème, etc.) des passagers. Finalement, on observe également que les barres sont séparée en deux, la première moitié étant les personnes décédées dans l'accident, la seconde moitié les personnes ayant pu être sauvées.
+
+Dans l'ensemble le graphique semble plutôt cohérent, le pourcentage de sauvetage parmis les femmes et les enfants sont considérablement plus important que chez les hommes, on aurait donc suivi la règle habituelle dans ces situation où les femmes et les enfants sont prioritaires.
+
+On peut cependant douter de l'exactitude de ces données, en effet le bateau ayant coulé, toutes traces exactes du nombre de passagers ont été perdues. Seul les témoignages des personnes ayant survécu ou ceux qui ont porté assistance aux naufragés étaient disponibles. De plus, dans ce genre de situation, il est souvent difficile d'effectuer une collecte exacte d'informations. Nous partirons tout de même du principe que ces données sont assez proches de la réalité.
+
+En plus des femmes, on peut constater qu'un nombre important d'homme de l'équipage a survécu au naufrage. Probablement ceux ayant la tâche de guider les canaux. Il est aussi intéressant d'observer que dans la 3ème classe, il y a  plus de survivant que dans la 2ème classe. Pourtant, en étant au fond du bateau, il y a avait pourtant moins de chance pour eux d'être sauvés. Finalement, il y a aussi une proportion relativement importante d'hommes de première classes qui ont été sauvés. Les canaux étant situés en haut du bateau, il n'est pas impossible qu'ils aient pu monter parmi les premiers, avant que l'on se rende compte qu'il n'y aurait pas assez de place pour tout le monde. Au final, ce sont les hommes de troisième classe qui ont eu le plus de chance de survivre.
+
+Il est important pour comparer les différentes catégories que les axes soient gradués selon une échelle identique. En effet le nombre de passagers dans chaque catégorie n'est pas du tout le même. Il est possible de libérer les axes avec le paramètre `scales`.
+
+```{r}
+titanic.bar <- barchart(
+	Class~Freq|Sex+Age, data = as.data.frame(Titanic),
+	groups = Survived, stack = T, layout = c(4,1), 
+	auto.key = list(title = "Survived", columns = 2),
+	scales = list(x="free")
+)
+
+print(titanic.bar)
+```
+
+Nous pouvons alors comparer les données d'une même colonne plus facilement, mais il n'est plus possible de comparer les colonnes entre-elles puisque les échelles ne sont plus les mêmes.
+
 Exercice 2
 ==========
 
-Il s'agit ici d'estimer la valeur de 
+Il s'agit ici d'estimer la valeur des coéfficients de corrélation de différents graphiques.
 
-Pour le graphique de gauche, au alentours de 0.9, proche de 1. Quantifie la linéarité, linéartié bien marquée et positive. En ragardant la pente des moindres carrés que l'ont peut tracer on aurait une droit avec une pente positive.
+Pour le premier graphique, il est probablement au alentours de 0.9, proche de 1. En effet, le coéfficient de corrélation quantifie la linéarité, et la linéarité de ce premier graphique est bien marquée. Ce coefficient est positif, en effet, en ragardant la pente des moindres carrés que l'on aurait pu tracer, on aurait une droit avec une pente positive.
 
-Pour le point 4, clairement -1 puisque l'on a à nouveau une corélation bien marquée. mais dans ce cas ce que l'ont aurait obtenu avec les moindres carré aurait une pente négative.
+Pour le point IV, clairement une valeur proche de -1 puisque l'on a à nouveau une corélation bien marquée. mais dans ce cas ce que l'ont aurait obtenu avec les moindres carré aurait une pente négative. Il est important de noter que ce n'est pas parce que la pente est forte ou faible que le coéficient de linéarité est grand ou petit. Il ne représente de la corrélation entre les deux variables.
 
-Ce n'est pas parce que la pente est forte ou faible que le coéficient de linéarité sera grand ou petit. Il ne c
+Au point II: le coefficient doit être proche de 0. Les points sont en effet pratiquement uniformément distribués. Il n'y a donc pas de corrélation entre les deux variables.
 
-Point II: 0. Points quaisment uniformémant distribués. Interrsant dans le domaine phamraceutique, si on a les dose et les effets, cela signifie qu'il n'y a pas d'effet du médicament. On peut modifier les doses sans modifiers les effets.
+Au point III: 0 également. Il y a clairement une corrélation quadratique. Cependant, le coefficient de corréalation est spcéialisé dans la linéarité. La droite des moindres carrés aurait passé plus ou moins au millieu. Il n'y a donc pas de linéarité. Si le coéfficient est proche de zéro, c'est par un effet de compensation, linéarité marquée d'un côté, et de l'autre mais opposée (négative à gauche, positive à droite).
 
-Pour le 3: 0. Il y a clairement un signal quadratique. Or le coefficient de coréalation est spcéialisé dans la linéarité. La droite des moindres carrés aurait passé plus ou moins au millieu. Il n'y a pas de linéarité. Compensation, linéarité marquée d'un côté, et de l'autre mais opposée.
+Exercice 3
+==========
+
+```{r}
+library(HSAUR2)
+data(plasma)
+plasma
+```
+
+Cette première étape charge la librairie `HSAUR2` qui contient les données nécessaires pour cet exercice, charge les données `plasma` et les affiche. Nous avons ici un tableau de données dans un ordre quelconque contenant 32 observations de trois variables.
+
+```{r}
+par(pty="s")
+plot(globulin~fibrinogen, data=plasma, pch=20,
+		 xlab="fibrinogène", ylab="globluline", main="")
+```
+
+Nous construisons ensuite un graphique de nuage de points. La première commande configure le cadre du graphique, nous forçons ici un cadre carré. Si le cadre était rectangulaire, on risquerait d'applatir une potentielle pente, le graphique est beaucoup plus cohérent avec un cadre carré.
+
+Le paramètre `pch` permet de sélectionner le symbole utilisé pour représenter les valeurs. Par défaut, c'est un cercle vide.
+
+Pour ce qui est de la corrélation, il ne semble y en avoir aucune. On peut augmenter le fibrinogène sans aucun effet sur la globuline. Les deux variables semblent indépendantes l'une de l'autre.
+
+On peut aussi remarquer une valeur très éloignée des autres sur la droite.
+
+La troisième variable nous indique pour chaque individu si la vitesse de sédimentation d’érythrocyte est supérieur à la valeur seuil de 20. Pour les chercheur, c'est une information intéressante puisqu'elle permet de construire un modèle de prédiction
+
+Exercice 4
+==========
+
+```{r}
+data(anscombe)
+help("anscombe")
+anscombe
+```
+
+Encore une fois, nous utilisons la commande `data` pour charger un jeu de données déjà présent dans R. Comme nous ne savons pas ce que contient ce jeu de données, nous utilisons la commande `help` pour obtenir une description.
+
+Nous calculons ensuite les coéfficients de corrélation $(x1, y1)$, $(x1, y2)$, $(x1, y3)$ et $(x4, y4)$.
+
+```{r}
+cor(anscombe$x1, anscombe$y1)
+cor(anscombe$x1, anscombe$y2)
+cor(anscombe$x1, anscombe$y3)
+cor(anscombe$x4, anscombe$y4)
+```
+
+Nous pouvons observer qu'ils sont tous aux alentours de 0.81, ce qui indique une corrélation assez marquée. Pour obtenir une représentation visuelle, nous pouvons alors tracer un graphique de nuage de points. Puisque nous avons 4 pairs de valeurs, nous allons tracer 4 graphiques d'un coup avec la commande `par(mfrow = ...)`
+
+```{r}
+par(mfrow=c(2,2), pty="s")
+plot(anscombe$x1, anscombe$y1, pch=21, bg="orange",
+		 xlab="", ylab="", xlim=c(4,20), ylim=c(4,14))
+plot(anscombe$x1, anscombe$y2, pch=21, bg="orange",
+		 xlab="", ylab="", xlim=c(4,20), ylim=c(4,14))
+plot(anscombe$x1, anscombe$y3, pch=21, bg="orange",
+		 xlab="", ylab="", xlim=c(4,20), ylim=c(4,14))
+plot(anscombe$x4, anscombe$y4, pch=21, bg="orange",
+		 xlab="", ylab="", xlim=c(4,20), ylim=c(4,14))
+par(mfrow=c(1,1))
+legend(9.5, 9, "r = 0.81", bty="n")
+```
+
+On peut constater que les graphiques sont assez surprenant en considérant la valeur du coéfficient de corrélation.
+
+Le premier est assez classique, un ensemble de point légerement dispersés, il existe bien une corrélation mais celle-ci n'est pas parfaitement marquée. Le coéfficient de 0.81 est donc assez justifié.
+
+Dans le deuxième graphique, la corrélation est en premier lieu parfaitement linéaire (entre 5 et 10). Passé le seuil de 10, les valeurs de l'axe vertical commencent à diminuer. On peut observer que la première partie du graphique est parfaitement linéaire, elle aurait ainsi obtenu un coefficient de corrélation de +1. Mais avec des valeurs plus importantes, la tendance s'inverse et le coefficient de corrélation serait alors de -1. Les proportions de ceux deux parties justifient probablement le coefficient global de 0.81.
+
+Pour le troisième graphique, nous avons une corrélation parfaite entre les deux variables. Il y a cependant une valeur clairement atypique qui se détache du reste. Le coefficient de corrélation reflète dont cet important écart, la corrélation n'est pas parfaite puisqu'il existe au moins un contre-exemple. On peut noter que si cette valeur était ignorée, on aurait alors 1.
+
+Le dernier graphique est un peu surprenant. En effet peut importe la valeur de Y, X ne change pas mais le coefficient de corrélation est proche de 1. Il s'agit en effet bien d'une corrélation puisque l'absence de corrélation aurait été une variation indépendant de X. À nouveau, comme pour le troisième graphique, la présence d'une valeur atypique pénalise le coefficient de corrélation global qui aurait été de 1 sans cette valeur.
+
+Exercice 5
+==========
+
+Une première chose que nous pouvons dire au sujet de ces graphiques, c'est qu'ils sont visuellement attrayant. Les couleurs sont agréables et le rendu est plaisant. Un graphique attrayant donne envie au lecteur d'y prêter attention et d'analyser son contenu.
+
+En revanche, plusieurs problèmes peuvent être relevés sur le contenu de ces graphiques.
+
+Pour le premier, il exprime les flux migratoires dans le monde pour sur une durée d'une année. Il est découpé selon les différentes régions du monde. On remarque tout de suite la partie "Soviet Union". Celle-ci est un peu surprenante puisque l'union soviétique n'existe plus en tant que tel. Il est donc difficile d'estimer quels pays sont inclus dans cette partie ou dans la partie Europe.
+
+Chaque partie est ensuite graduée d'une façon non-précisée. Il semble logique de partir du principe que les nombres représentent le nombre de personnes ayant quitté ou rejoint un pays faisant partie de catégorisation. Cependant, l'absence totale d'unité ne nous permet pas de dire si nous parlons de centaines, milliers ou millions de personnes.
+
+Finalement, une section de ces échelles est colorée. À nouveau, on en déduit qu'il s'agit de la proportion de personne ayant quitté la région par opposition au nombre de personnes ayant immigré dans cette région. Cependant, les flux dessinées au centre du graphique ne correspondent pas exactement à la coloration. Nous nous posons donc la question de savoir laquelle des deux informations, la coloration ou les flux, n'est pas précise.
+
+Le second graphique est très douteux. On reconnaît assez rapidement la forme générale de la Suisse, mais l'absence totale des contours du pays rendent difficile de situer précisément chaque point. Les contours du lac léman sont par exemple particulièrement durs à estimer puisque les points des cantons de Genève, Vaud, Fribourg et Valais semblent placé d'une façon très étrange.
+
+Les points représente la répartition de la natures des terrains dans chaque canton. Il est déjà étonnant de constater que seul le plus gros points indique la valeur numérique associée. Il n'est déjà pas simple d'estimer les proportions des points sans informations, mais pour certains cantons (par exemple Genève), estimer les valeurs associées à des points minuscules est proche de l'impossible.
+
+On remarque aussi qu'il est impossible de comparer les cantons entre eux. Les points semblent en effet représenter non pas des proportions en pourcentage (qui seraient comparable), mais des km2. En effet les plus grands cantons ont des points plus grand pour le même pourcentage (ce qui est pourtant indiqué). On peut observer par exemple le canton du Tessin dont le plus grand point indique 51% alors que le point plus gros du canton de Bern n'indique que 31%.
+
+La disposition de ces points en ligne ou serpent ne semble pas avoir une raison particulière. Ils ne peuvent vraisemblablement pas correspondre à une représentation de la position géographique des ces différents types de terrain et semblent tout simplement arbitraire.
+
+Finalement, l'ensemble du graphique semble très compliqué à analyser. Les points vont dans tous les sens structures particulière. La lecture d'informations intéressantes à partir de ce graphique est ardue.

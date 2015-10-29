@@ -22,27 +22,34 @@ examen <- read.table("examen.txt", header=T)
 algae <- read.table("algae.txt", header=T)
 ```
 
+La première commande charge une liste de valeur (un vecteur), le seconde une table de données (plusieurs colonnes). On peut observer les données chargées dans la partie "Environement" de R Studio.
+
 Vecteur / Liste
 ---------------
 
-Contenu de `cpus`
+Contenu de `cpus`:
 
 ```{r}
 cpus
 ```
 
-Accès direct à un élément ou à une plage de valeurs du vecteur
+Ecrire simplement le nom d'une variable permet d'afficher son contenu.
+Accès direct à un élément ou à une plage de valeurs du vecteur:
 
 ```{r}
 cpus[7]
 cpus[3:9]
 ```
 
-Filtrer
+En réalité, la syntaxe `X:Y` crée un vecteur dont les composantes vont de `X` à `Y`. Il est ensuite possible d'utiliser un vecteur comme index d'un autre vecteur pour sélectionner plusieurs valeurs.
+
+Filtrer:
 
 ```{r}
 cpus[cpus > 185]
 ```
+
+À nouveau, `cpus > 185` produit un vecteur, cette fois-ci de booléens qui permet à priori de filtrer les index d'un autre vecteur. (Les positions à TRUE sont conservées, celles à FALSE ne sont pas contenu dans le vecteur résultat)
 
 Table
 -----
@@ -76,9 +83,9 @@ pg<-p + geom_boxplot(aes(fill=factor(season)), outlier.colour="blue", outlier.si
 print(pg)
 ```
 
-C'est en automne qu'on observe la boite la plus épaisse, c'est donc en automne qu'on a la plus grande dispersion des données.
+On remarque tout de suite les deux warnings, ils nous indiquent que deux lignes avec des valeurs "non-finie" ont été retirées. En réalité, il s'agit de lignes avec une valeur non-définie (N/A). Pour ne pas biaiser le graphique en utilisant un nombre de valeurs différent pour chaque boites, le logiciel a préféré ignorer la ligne entière.
 
-On remarque que quelque soit la saison, les boites sont plutôt aux alentours de
+C'est en automne qu'on observe la boite la plus épaisse, c'est donc en automne qu'on a la plus grande dispersion des données.
 
 Entre les quatres saisons, il n'y a pas beaucoup de différences entres les médiannes. Il y en a forcément une, mais elle n'est pas significative.
 
@@ -109,7 +116,6 @@ nx <- tapply(algae$mxPH, algae$season, sd, na.rm=T)
 min(nx)
 names(nx)[nx==min(nx)]
 ```
-
 
 ```{r}
 nx <- aggregate(mxPH~season, algae, IQR, na.rm=T)
