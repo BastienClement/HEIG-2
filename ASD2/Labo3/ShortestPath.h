@@ -14,7 +14,6 @@
 #include <set>
 #include <functional>
 
-
 // Classe parente de toutes les classes de plus court chemin.
 // Defini les membres edgeTo et distanceTo commun à toutes ces
 // classes, ainsi que les methodes DistanceTo, EdgeTo et PathTo
@@ -52,7 +51,14 @@ public:
 	// Renvoie la liste ordonnee des arcs constituant un chemin le plus court du
 	// sommet source à v.
 	Edges PathTo(int v) {
-		/* A IMPLEMENTER */
+		Edges edges;
+		while (DistanceTo(v) > 0) {
+			Edge e = EdgeTo(v);
+			edges.push_back(e);
+			v = e.From();
+		}
+		reverse(edges.begin(), edges.end());
+		return edges;
 	}
 
 protected:
@@ -69,8 +75,45 @@ public:
 	typedef typename BASE::Edge Edge;
 	typedef typename BASE::Weight Weight;
 
+	typedef std::pair<int, Weight> WeightedVertex;
+
 	DijkstraSP(const GraphType& g, int v)  {
-		/* A IMPLEMENTER */
+		this->edgeTo.resize(g.V());
+		this->distanceTo.resize(g.V());
+
+		std::set<WeightedVertex> pq;
+		std::vector<bool> marked(g.V());
+
+		for (int i = g.V() - 1; i >= 0; i--) {
+			this->distanceTo.at(i) = std::numeric_limits<Weight>::max();
+		}
+
+		this->distanceTo.at(v) = 0;
+		pq.insert(std::make_pair(v, 0));
+
+		while (!pq.empty()) {
+			WeightedVertex wv = *pq.begin();
+			pq.erase(wv);
+
+			marked.at(wv.first) = true;
+
+			g.forEachAdjacentEdge(wv.first, [&](Edge edge) {
+				// Sommet de destination
+				int vertex = edge.To();
+				if (marked.at(vertex)) return;
+
+				// Distance de la destination
+				Weight old_weight = this->distanceTo.at(vertex);
+				Weight new_weight = wv.second + edge.Weight();
+
+				if (old_weight > new_weight) {
+					pq.erase(std::make_pair(vertex, old_weight));
+					pq.insert(std::make_pair(vertex, new_weight));
+					this->edgeTo.at(vertex) = edge;
+					this->distanceTo.at(vertex) = new_weight;
+				}
+			});
+		}
 	}
 };
 
