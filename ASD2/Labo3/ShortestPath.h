@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   ShortestPath.h
  * Author: Olivier Cuisenaire
  *
@@ -30,7 +30,7 @@ class ShortestPath {
 public:
 	// Type des arcs. Normalement ASD2::DirectedEdge<double>
 	typedef typename GraphType::Edge Edge;
-	
+
 	// Type des poids. Normalement double ou int.
 	typedef typename Edge::WeightType Weight;
 
@@ -42,12 +42,12 @@ public:
 	Weight DistanceTo(int v) {
 		return distanceTo.at(v);
 	}
-	
+
 	// Renvoie le dernier arc u->v du chemin le plus court du sommet source a v
 	Edge EdgeTo(int v) {
 		return edgeTo.at(v);
 	}
-	
+
 	// Renvoie la liste ordonnee des arcs constituant un chemin le plus court du
 	// sommet source à v.
 	Edges PathTo(int v) {
@@ -77,11 +77,18 @@ public:
 
 	typedef std::pair<int, Weight> WeightedVertex;
 
+	struct weightLess {
+		bool operator() (const WeightedVertex& x, const WeightedVertex& y) const {return x.second<y.second;}
+		typedef WeightedVertex first_argument_type;
+		typedef WeightedVertex second_argument_type;
+		typedef bool result_type;
+	};
+
 	DijkstraSP(const GraphType& g, int v)  {
 		this->edgeTo.resize(g.V());
 		this->distanceTo.resize(g.V());
 
-		std::set<WeightedVertex> pq;
+		std::set<WeightedVertex, weightLess> pq;
 		std::vector<bool> marked(g.V());
 
 		for (int i = g.V() - 1; i >= 0; i--) {
@@ -132,30 +139,30 @@ private:
 	typedef ShortestPath<GraphType> BASE;
 	typedef typename BASE::Edge Edge;
 	typedef typename BASE::Weight Weight;
-	
+
 	// Relachement de l'arc e
 	void relax(const Edge& e) {
 		int v = e.From(), w = e.To();
 		Weight distThruE = this->distanceTo[v]+e.Weight();
-		
+
 		if(this->distanceTo[w] > distThruE) {
 			this->distanceTo[w] = distThruE;
 			this->edgeTo[w] = e;
 		}
 	}
-	
+
 public:
-	
+
 	// Constructeur a partir du graphe g et du sommet v a la source
 	// des plus courts chemins
 	BellmanFordSP(const GraphType& g, int v) {
-		
+
 		this->edgeTo.reserve(g.V());
 		this->distanceTo.assign(g.V(),std::numeric_limits<Weight>::max());
 
 		this->edgeTo[v] = Edge(v,v,0);
 		this->distanceTo[v] = 0;
-		
+
 		for(int i=0;i<g.V();++i)
 			g.forEachEdge([this](const Edge& e){
 				this->relax(e);
@@ -180,10 +187,10 @@ private:
 	typedef ShortestPath<GraphType> BASE;
 	typedef typename BASE::Edge Edge;
 	typedef typename BASE::Weight Weight;
-	
+
 public:
 	BellmanFordQueueSP(const GraphType& g, int v) {
-		
+
 	}
 };
 */
