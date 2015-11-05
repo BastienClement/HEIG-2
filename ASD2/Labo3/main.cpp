@@ -17,39 +17,22 @@
 #include "EdgeWeightedGraph.h"
 #include "EdgeWeightedDiGraph.h"
 
+#include "RoadGraphWrapper.h"
+
 using namespace std;
 
 // Calcule et affiche le plus court chemin de la ville depart a la ville arrivee
 // en passant par le reseau routier rn. Le critere a optimiser est la distance.
 
 void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& rn) {
-    /* A IMPLEMENTER */
-    int idDepart = rn.cityIdx.at(depart);
-    int idArrivee = rn.cityIdx.at(depart);
-    queue<int> q;
-    vector<int> parent(rn.cities.size(), -1);
-    int currentNode;
+    RoadDiGraphWrapper<ShortestWeighting> rgw(rn);
+    DijkstraSP<RoadDiGraphWrapper<ShortestWeighting>> sp(rgw, rn.cityIdx.at(depart));
 
-    q.push(idDepart);
-    parent.at(idDepart) = idDepart;
+    cout << depart << endl;
 
-    while(q.size())
-    {
-        currentNode = q.front();
-        q.pop();
-        for( auto w : rn.cities.at(currentNode).roads ) {
-            if(currentNode == -1) {
-                q.push(w);
-                parent.at(w) = currentNode;
-            }
-        }
-    }
-
-    currentNode = idArrivee;
-
-    while(parent.at(currentNode) != currentNode) {
-        cout << rn.cities.at(currentNode).name ;
-        currentNode = parent.at(currentNode);
+    auto path = sp.PathTo(rn.cityIdx.at(arrivee));
+    for (auto road : path) {
+        cout << rn.cities.at(road.To()).name << " [" << road.Weight() << "]" << endl;
     }
 }
 
@@ -108,8 +91,8 @@ int main(int argc, const char * argv[]) {
 
     testShortestPath("tinyEWD.txt");
     testShortestPath("mediumEWD.txt");
-    testShortestPath("1000EWD.txt");
-    testShortestPath("10000EWD.txt");
+    //testShortestPath("1000EWD.txt");
+    //testShortestPath("10000EWD.txt");
     //testShortestPath("largeEWD.txt"); // disponible sur le moodle du cours
 
     RoadNetwork rn("reseau.txt");
