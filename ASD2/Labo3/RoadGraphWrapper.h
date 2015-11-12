@@ -8,33 +8,30 @@
 #include "RoadNetwork.h"
 #include <functional>
 
-struct ShortestWeighting {
-	double operator() (RoadNetwork::Road edge) {
-		return edge.lenght;
-	}
-};
-
-struct FastestWeighting {
-	double operator() (RoadNetwork::Road edge) {
-		return 0;
-	}
-};
-
-struct CheapestWeighting {
-	double operator() (RoadNetwork::Road edge) {
-		return 0;
-	}
-};
-
-template <typename Weighting>
 class RoadGraphWrapper {
 private:
+	typedef std::function<double(RoadNetwork::Road)> Weighting;
 	const RoadNetwork& rn;
 	Weighting weighting;
 
 public:
-	RoadGraphWrapper(const RoadNetwork& rn): rn(rn) {}
+	RoadGraphWrapper(const RoadNetwork& rn, Weighting w): rn(rn), weighting(w) {}
+
+	int V() const {
+		return rn.cities.size();
+	}
+
+	typedef WeightedEdge<double> Edge;
+
+	template<typename Func>
+	void forEachEdge(Func f) const {
+		for (const auto road : rn.roads) {
+			f(Edge(road.cities.first, road.cities.second, weighting(road)));
+		}
+	}
 };
+
+// ----
 
 class RoadDiGraphWrapper {
 private:
@@ -45,19 +42,7 @@ private:
 public:
 	RoadDiGraphWrapper(const RoadNetwork& rn, Weighting w): rn(rn), weighting(w) {}
 
-	struct Edge {
-		typedef double WeightType;
-		int from, to;
-		WeightType weight;
-
-		Edge(): from(-1), to(-1), weight(std::numeric_limits<WeightType>::max()) {}
-		Edge(int from, int to, WeightType weight): to(to), from(from), weight(weight) {}
-
-		int To() { return to; }
-		int From() { return from; }
-
-		WeightType Weight() { return weight; }
-	};
+	typedef WeightedDirectedEdge<double> Edge;
 
 	int V() const {
 		return rn.cities.size();

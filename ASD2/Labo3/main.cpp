@@ -28,12 +28,17 @@ void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& r
     RoadDiGraphWrapper rgw(rn, [&](RoadNetwork::Road road) { return road.lenght; });
     DijkstraSP<RoadDiGraphWrapper> sp(rgw, rn.cityIdx.at(depart));
 
+    double sum = 0;
     cout << depart << endl;
 
     auto path = sp.PathTo(rn.cityIdx.at(arrivee));
     for (auto road : path) {
-        cout << rn.cities.at(road.To()).name << " [" << road.Weight() << "]" << endl;
+        double length = road.Weight();
+        sum += length;
+        cout << rn.cities.at(road.To()).name << " [" << length << "]" << endl;
     }
+
+    cout << "\n==> " << sum << " km" << endl << endl;
 }
 
 // Calcule et affiche le plus rapide chemin de la ville depart a la ville arrivee via la ville "via"
@@ -41,7 +46,35 @@ void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& r
 // sachant que l'on roule a 120km/h sur autoroute et 70km/h sur route normale.
 
 void PlusRapideChemin(const string& depart, const string& arrivee, const string& via, RoadNetwork& rn) {
-    /* A IMPLEMENTER */
+    RoadDiGraphWrapper rgw(rn, [&](RoadNetwork::Road road) {
+        double motorway = road.motorway.Value();
+        double avg_speed = motorway * 120 + (1 - motorway) * 70;
+        return road.lenght * 60 / avg_speed;
+    });
+
+    DijkstraSP<RoadDiGraphWrapper> sp(rgw, rn.cityIdx.at(via));
+
+    auto path_depart = sp.PathTo(rn.cityIdx.at(depart));
+    auto path_arrivee = sp.PathTo(rn.cityIdx.at(arrivee));
+
+    reverse(path_depart.begin(), path_depart.end());
+
+    double sum = 0;
+    cout << depart << endl;
+
+    for (auto road : path_depart) {
+        double duration = road.Weight();
+        sum += duration;
+        cout << rn.cities.at(road.From()).name << " [" << duration << "]" << endl;
+    }
+
+    for (auto road : path_arrivee) {
+        double duration = road.Weight();
+        sum += duration;
+        cout << rn.cities.at(road.To()).name << " [" << duration << "]" << endl;
+    }
+
+    cout << "\n==> " << sum << " minutes" << endl << endl;
 }
 
 // Calcule et affiche le plus reseau a renover couvrant toutes les villes le moins
@@ -49,7 +82,29 @@ void PlusRapideChemin(const string& depart, const string& arrivee, const string&
 // coute 7 MF.
 
 void ReseauLeMoinsCher(RoadNetwork &rn) {
-    /* A IMPLEMENTER */
+    RoadGraphWrapper rgw(rn, [&](RoadNetwork::Road road) {
+        double motorway = road.motorway.Value();
+        double avg_unit_cost = motorway * 15 + (1 - motorway) * 7;
+        return avg_unit_cost * road.lenght;
+    });
+
+    auto mst = MinimumSpanningTree<RoadGraphWrapper>::Kruskal(rgw);
+    double sum = 0;
+
+    for (const auto edge: mst) {
+        int from_idx = edge.Either();
+        int to_idx = edge.Other(from_idx);
+
+        string from = rn.cities.at(from_idx).name;
+        string to = rn.cities.at(to_idx).name;
+
+        double cost = edge.Weight();
+        sum += cost;
+
+        cout << from << " <=> " << to << " [" << cost << "]" << endl;
+    }
+
+    cout << "\n==> " << sum << " MF" << endl << endl;
 }
 
 // compare les algorithmes Dijkstra et BellmanFord pour calculer les plus courts chemins au
