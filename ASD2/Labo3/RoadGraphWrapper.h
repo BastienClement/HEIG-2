@@ -9,7 +9,7 @@
 
 struct ShortestWeighting {
 	double operator() (RoadNetwork::Road edge) {
-		return 0;
+		return edge.lenght;
 	}
 };
 
