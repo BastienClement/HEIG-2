@@ -1,3 +1,10 @@
+/*
+ * Fichier 	: Hanoi.java
+ * Date		: 29.10.2015
+ * But 		: Permet la résolution et l'affichage du problème des tours de Hanoï.
+ * Auteur	: Bastien Clément / Alain Hardy
+ */
+
 package hanoi;
 
 import hanoi.gui.JHanoi;
@@ -12,7 +19,7 @@ public class Hanoi {
     @SuppressWarnings("unchecked")
     Stack<Integer>[] sticks = new Stack[3];
 
-    int turn = 1;
+    int turn = -1;
     boolean finished = false;
 
     public Hanoi(int h) {
@@ -42,6 +49,15 @@ public class Hanoi {
 
     /**
      * Résolution récursive du problème des tours de Hanoi
+     * int n : Nombre de disque à déplacer
+     * Stack<Integer> D : Pile de départ
+     * Stack<Integer> A : Pile d'arrivée
+     * Stack<Integer> I : Pile intermédiare
+     * 
+     * Dans un premier temps, il faut déplacer les disques de la colonne de départ dans la colonne intermédiaire,
+     * en se servant de la colonne d'arrivée comme de colonne intermédiaire, afin de pouvoir mettre le plus grand 
+     * disque dans la colonne d'arrivée. À partir de là, il faut déplacer les  disques de la colonne intermédiaire 
+     * à la colonne d'arrivée en se servant de la colonne de départ comme de colonne intermédiaire.
      */
     private void resolve(JHanoi frame, int n, Stack<Integer> D, Stack<Integer> A, Stack<Integer> I) {
         if (n == 0) return;
@@ -49,9 +65,10 @@ public class Hanoi {
         resolve(frame, n - 1, D, I, A);
 
         A.push(D.pop());
+        
         printStep();
         if (frame != null) frame.display();
-
+        
         resolve(frame, n - 1, I, A, D);
     }
 
@@ -60,7 +77,7 @@ public class Hanoi {
      * forme textuelle.
      */
     private void printStep() {
-        System.out.println("-- Turn: " + turn++);
+        System.out.println("-- Turn: " + ++turn);
         System.out.println(this);
     }
 

@@ -1,3 +1,10 @@
+/*
+ * Fichier 	: Stack.java
+ * Date		: 29.10.2015
+ * But 		: Permet l'implémentation d'une pile itérable.
+ * Auteur	: Bastien Clément / Alain Hardy
+ */
+
 package util;
 
 import java.util.EmptyStackException;
