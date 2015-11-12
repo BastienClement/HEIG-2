@@ -25,8 +25,8 @@ using namespace std;
 // en passant par le reseau routier rn. Le critere a optimiser est la distance.
 
 void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& rn) {
-    RoadDiGraphWrapper<ShortestWeighting> rgw(rn);
-    DijkstraSP<RoadDiGraphWrapper<ShortestWeighting>> sp(rgw, rn.cityIdx.at(depart));
+    RoadDiGraphWrapper rgw(rn, [&](RoadNetwork::Road road) { return road.lenght; });
+    DijkstraSP<RoadDiGraphWrapper> sp(rgw, rn.cityIdx.at(depart));
 
     cout << depart << endl;
 

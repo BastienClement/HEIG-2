@@ -6,6 +6,7 @@
 #define LABO3_ROADGRAPHWRAPPER_H
 
 #include "RoadNetwork.h"
+#include <functional>
 
 struct ShortestWeighting {
 	double operator() (RoadNetwork::Road edge) {
@@ -26,36 +27,50 @@ struct CheapestWeighting {
 };
 
 template <typename Weighting>
-class RoadGraphWrapper : public EdgeWeightedGraph<double> {
+class RoadGraphWrapper {
 private:
-	typedef EdgeWeightedGraph<double> BASE;
+	const RoadNetwork& rn;
 	Weighting weighting;
 
 public:
-	RoadGraphWrapper(const RoadNetwork& rn): BASE(rn.cities.size()) {
-		int E = rn.roads.size();
-		for (int i = 0; i < E; i++) {
-			auto road = rn.roads.at(i);
-			auto cities = road.cities;
-			addEdge(cities.first, cities.second, weighting(road));
-		}
-	}
+	RoadGraphWrapper(const RoadNetwork& rn): rn(rn) {}
 };
 
-template <typename Weighting>
-class RoadDiGraphWrapper : public EdgeWeightedDiGraph<double> {
+class RoadDiGraphWrapper {
 private:
-	typedef EdgeWeightedDiGraph<double> BASE;
-	Weighting weighting;
+	typedef std::function<double(RoadNetwork::Road)> Weighting;
+	const RoadNetwork& rn;
+	const Weighting weighting;
 
 public:
-	RoadDiGraphWrapper(const RoadNetwork& rn): BASE(rn.cities.size()) {
-		int E = rn.roads.size();
-		for (int i = 0; i < E; i++) {
-			auto road = rn.roads.at(i);
-			auto cities = road.cities;
-			addEdge(cities.first, cities.second, weighting(road));
-			addEdge(cities.second, cities.first, weighting(road));
+	RoadDiGraphWrapper(const RoadNetwork& rn, Weighting w): rn(rn), weighting(w) {}
+
+	struct Edge {
+		typedef double WeightType;
+		int from, to;
+		WeightType weight;
+
+		Edge(): from(-1), to(-1), weight(std::numeric_limits<WeightType>::max()) {}
+		Edge(int from, int to, WeightType weight): to(to), from(from), weight(weight) {}
+
+		int To() { return to; }
+		int From() { return from; }
+
+		WeightType Weight() { return weight; }
+	};
+
+	int V() const {
+		return rn.cities.size();
+	}
+
+	template<typename Func>
+	void forEachAdjacentEdge(int v, Func f) const {
+		for (const auto road : rn.roads) {
+			if (road.cities.first == v) {
+				f(Edge(road.cities.first, road.cities.second, weighting(road)));
+			} else if (road.cities.second == v) {
+				f(Edge(road.cities.second, road.cities.first, weighting(road)));
+			}
 		}
 	}
 };
