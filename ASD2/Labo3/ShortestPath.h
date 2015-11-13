@@ -76,42 +76,71 @@ public:
 	typedef typename BASE::Edge Edge;
 	typedef typename BASE::Weight Weight;
 
+	/**
+	 * Une paire constituée d'un poids et du sommet associé.
+	 */
 	typedef std::pair<Weight, int> WeightedVertex;
 
+	/**
+	 * Calculs les plus courts chemin partant de v avec
+	 * l'algorithme de Dijsktra.
+	 */
 	DijkstraSP(const GraphType& g, int v) {
+		// Nombre de sommets dans le graphe
 		const int V = g.V();
 
+		// Allocation des vecteurs edgeTo et distanceTo
 		this->edgeTo.resize(V);
 		this->distanceTo.resize(V);
 
+		// Création d'un set que nous utiiserons comme PriorityQueue
 		std::set<WeightedVertex> pq;
+
+		// Marqueurs pour les sommets déjà visités
 		std::vector<bool> marked(V, false);
 
+		// Initialisation de la distance de tous les sommets à +Inf
 		for (int i = 0; i < V; i++) {
 			this->distanceTo.at(i) = std::numeric_limits<Weight>::infinity();
 		}
 
+		// La distance avec le sommet de départ est 0
 		this->distanceTo.at(v) = 0;
+
+		// On ajoute le sommet de départ dans la queue de priorité
 		pq.insert(std::make_pair(0, v));
 
+		// Tant que la queue n'est pas vide, on traite le sommet le plus proche
 		while (!pq.empty()) {
+			// Numéro du sommet le plus proche
 			int v = pq.begin()->second;
+
+			// On le retire de la queue
 			pq.erase(pq.begin());
 
+			// On le marque comme traité
 			marked.at(v) = true;
 
+			// Traitement des sommets adjacents
 			g.forEachAdjacentEdge(v, [&](Edge edge) {
 				// Sommet de destination
 				int w = edge.To();
+
+				// S'il est marqué, il n'est pas utile de le traiter
 				if (marked.at(w)) return;
 
 				// Distance de la destination
 				Weight old_weight = this->distanceTo.at(w);
 				Weight new_weight = this->distanceTo.at(v) + edge.Weight();
 
+				// Si nous avons trouvé un meilleur chemin, mise à jour
 				if (new_weight < old_weight) {
+					// Mise à jour du poids du sommet en retirant l'ancienne paire du
+					// set et en insérant une nouvelle avec le poids mis à jour.
 					pq.erase(std::make_pair(old_weight, w));
 					pq.insert(std::make_pair(new_weight, w));
+
+					// Mise à jour des prédecesseurs et de la distance.
 					this->edgeTo.at(w) = edge;
 					this->distanceTo.at(w) = new_weight;
 				}
