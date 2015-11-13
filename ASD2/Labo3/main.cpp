@@ -48,8 +48,8 @@ void PlusCourtChemin(const string& depart, const string& arrivee, RoadNetwork& r
 void PlusRapideChemin(const string& depart, const string& arrivee, const string& via, RoadNetwork& rn) {
     RoadDiGraphWrapper rgw(rn, [&](RoadNetwork::Road road) {
         double motorway = road.motorway.Value();
-        double avg_speed = motorway * 120 + (1 - motorway) * 70;
-        return road.lenght * 60 / avg_speed;
+        double hours = (motorway / 120 + (1 - motorway) / 70) * road.lenght;
+        return hours * 60;
     });
 
     DijkstraSP<RoadDiGraphWrapper> sp(rgw, rn.cityIdx.at(via));
@@ -71,7 +71,7 @@ void PlusRapideChemin(const string& depart, const string& arrivee, const string&
     for (auto road : path_arrivee) {
         double duration = road.Weight();
         sum += duration;
-        cout << rn.cities.at(road.To()).name << " [" << duration << "]" << endl;
+        cout << rn.cities.at(road.To()).name << " [" << duration << "] " << endl;
     }
 
     cout << "\n==> " << sum << " minutes" << endl << endl;
@@ -133,7 +133,7 @@ void testShortestPath(string filename)
 
     for (int v=0; v<ewd.V(); ++v) {
         if (referenceSP.DistanceTo(v) != testSP.DistanceTo(v) ) {
-            cout << "Oops: vertex" << v << " has " << referenceSP.DistanceTo(v) << " != " <<  testSP.DistanceTo(v) << endl;
+            cout << "Oops: vertex " << v << " has " << referenceSP.DistanceTo(v) << " != " <<  testSP.DistanceTo(v) << endl;
             ok = false;
             break;
         }
@@ -146,7 +146,7 @@ int main(int argc, const char * argv[]) {
 
     testShortestPath("tinyEWD.txt");
     testShortestPath("mediumEWD.txt");
-    //testShortestPath("1000EWD.txt");
+    testShortestPath("1000EWD.txt");
     //testShortestPath("10000EWD.txt");
     //testShortestPath("largeEWD.txt"); // disponible sur le moodle du cours
 

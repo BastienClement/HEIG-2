@@ -22,10 +22,11 @@
 // Le calcul des plus courts chemins est fait dans les constructeurs
 // des classes derivees.
 
-template<typename GraphType>   // Type du graphe pondere oriente a traiter
-							   // GraphType doit se comporter comme un
-							   // EdgeWeightedDiGraph et definir le
-							   // type GraphType::Edge
+template<typename GraphType>
+// Type du graphe pondere oriente a traiter
+// GraphType doit se comporter comme un
+// EdgeWeightedDiGraph et definir le
+// type GraphType::Edge
 class ShortestPath {
 public:
 	// Type des arcs. Normalement ASD2::DirectedEdge<double>
@@ -75,49 +76,44 @@ public:
 	typedef typename BASE::Edge Edge;
 	typedef typename BASE::Weight Weight;
 
-	typedef std::pair<int, Weight> WeightedVertex;
+	typedef std::pair<Weight, int> WeightedVertex;
 
-	struct weightLess {
-		bool operator() (const WeightedVertex& x, const WeightedVertex& y) const {return x.second<y.second;}
-		typedef WeightedVertex first_argument_type;
-		typedef WeightedVertex second_argument_type;
-		typedef bool result_type;
-	};
+	DijkstraSP(const GraphType& g, int v) {
+		const int V = g.V();
 
-	DijkstraSP(const GraphType& g, int v)  {
-		this->edgeTo.resize(g.V());
-		this->distanceTo.resize(g.V());
+		this->edgeTo.resize(V);
+		this->distanceTo.resize(V);
 
-		std::set<WeightedVertex, weightLess> pq;
-		std::vector<bool> marked(g.V());
+		std::set<WeightedVertex> pq;
+		std::vector<bool> marked(V, false);
 
-		for (int i = g.V() - 1; i >= 0; i--) {
-			this->distanceTo.at(i) = std::numeric_limits<Weight>::max();
+		for (int i = 0; i < V; i++) {
+			this->distanceTo.at(i) = std::numeric_limits<Weight>::infinity();
 		}
 
 		this->distanceTo.at(v) = 0;
-		pq.insert(std::make_pair(v, 0));
+		pq.insert(std::make_pair(0, v));
 
 		while (!pq.empty()) {
-			WeightedVertex wv = *pq.begin();
-			pq.erase(wv);
+			int v = pq.begin()->second;
+			pq.erase(pq.begin());
 
-			marked.at(wv.first) = true;
+			marked.at(v) = true;
 
-			g.forEachAdjacentEdge(wv.first, [&](Edge edge) {
+			g.forEachAdjacentEdge(v, [&](Edge edge) {
 				// Sommet de destination
-				int vertex = edge.To();
-				if (marked.at(vertex)) return;
+				int w = edge.To();
+				if (marked.at(w)) return;
 
 				// Distance de la destination
-				Weight old_weight = this->distanceTo.at(vertex);
-				Weight new_weight = wv.second + edge.Weight();
+				Weight old_weight = this->distanceTo.at(w);
+				Weight new_weight = this->distanceTo.at(v) + edge.Weight();
 
-				if (old_weight > new_weight) {
-					pq.erase(std::make_pair(vertex, old_weight));
-					pq.insert(std::make_pair(vertex, new_weight));
-					this->edgeTo.at(vertex) = edge;
-					this->distanceTo.at(vertex) = new_weight;
+				if (new_weight < old_weight) {
+					pq.erase(std::make_pair(old_weight, w));
+					pq.insert(std::make_pair(new_weight, w));
+					this->edgeTo.at(w) = edge;
+					this->distanceTo.at(w) = new_weight;
 				}
 			});
 		}
@@ -127,11 +123,11 @@ public:
 // Algorithme de BellmanFord.
 
 template<typename GraphType> // Type du graphe pondere oriente a traiter
-							 // GraphType doit se comporter comme un
-							 // EdgeWeightedDiGraph et definir forEachEdge(Func),
-							 // ainsi que le type GraphType::Edge. Ce dernier doit
-							 // se comporter comme ASD2::DirectedEdge, c-a-dire definir From(),
-							 // To() et Weight()
+// GraphType doit se comporter comme un
+// EdgeWeightedDiGraph et definir forEachEdge(Func),
+// ainsi que le type GraphType::Edge. Ce dernier doit
+// se comporter comme ASD2::DirectedEdge, c-a-dire definir From(),
+// To() et Weight()
 
 class BellmanFordSP : public ShortestPath<GraphType> {
 
@@ -143,9 +139,9 @@ private:
 	// Relachement de l'arc e
 	void relax(const Edge& e) {
 		int v = e.From(), w = e.To();
-		Weight distThruE = this->distanceTo[v]+e.Weight();
+		Weight distThruE = this->distanceTo[v] + e.Weight();
 
-		if(this->distanceTo[w] > distThruE) {
+		if (this->distanceTo[w] > distThruE) {
 			this->distanceTo[w] = distThruE;
 			this->edgeTo[w] = e;
 		}
@@ -158,13 +154,13 @@ public:
 	BellmanFordSP(const GraphType& g, int v) {
 
 		this->edgeTo.reserve(g.V());
-		this->distanceTo.assign(g.V(),std::numeric_limits<Weight>::max());
+		this->distanceTo.assign(g.V(), std::numeric_limits<Weight>::max());
 
-		this->edgeTo[v] = Edge(v,v,0);
+		this->edgeTo[v] = Edge(v, v, 0);
 		this->distanceTo[v] = 0;
 
-		for(int i=0;i<g.V();++i)
-			g.forEachEdge([this](const Edge& e){
+		for (int i = 0; i < g.V(); ++i)
+			g.forEachEdge([this](const Edge& e) {
 				this->relax(e);
 			});
 	}
