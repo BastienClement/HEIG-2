@@ -2,6 +2,9 @@
  * File:   main.cpp
  * ASD 2 - Labo 3
  * Author: Olivier Cuisenaire
+ * Modified by : Bastien Clément / Alain Hardy
+ * Description : Calcul de chemin le plus court selon des critères spécifique
+ *               et teste des fonctions implémentées.
  *
  * Created on 18. novembre 2014, 14:58
  */
@@ -147,8 +150,8 @@ int main(int argc, const char * argv[]) {
     testShortestPath("tinyEWD.txt");
     testShortestPath("mediumEWD.txt");
     testShortestPath("1000EWD.txt");
-    //testShortestPath("10000EWD.txt");
-    //testShortestPath("largeEWD.txt"); // disponible sur le moodle du cours
+    testShortestPath("10000EWD.txt");
+    testShortestPath("largeEWD.txt"); // disponible sur le moodle du cours
 
     RoadNetwork rn("reseau.txt");
 

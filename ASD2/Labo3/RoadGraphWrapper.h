@@ -1,6 +1,12 @@
-//
-// Created by Bastien Clément on 05.11.15.
-//
+/*
+ * File:   RoadGraphWrapper.h
+ * ASD 2 - Labo 3
+ * Author: Bastien Clément / Alain Hardy
+ * Description : Implémentation des fonctions permettant d'utilisé un
+ *               RoadNetwork comme un graphe.
+ *
+ * Created on 30. octobre 2015, 11:20
+ */
 
 #ifndef LABO3_ROADGRAPHWRAPPER_H
 #define LABO3_ROADGRAPHWRAPPER_H

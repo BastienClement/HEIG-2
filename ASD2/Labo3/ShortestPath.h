@@ -1,6 +1,9 @@
 /*
  * File:   ShortestPath.h
  * Author: Olivier Cuisenaire
+ * Modified by : Bastien Clément / Alain Hardy
+ * Description : Classe permettant de calculer les chemins les plus court
+ *               sur un graphe ayant des arrêtes pondérées.
  *
  * Created on 5. novembre 2014, 10:16
  */
