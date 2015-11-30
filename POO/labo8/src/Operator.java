@@ -1,263 +1,185 @@
 
 public abstract class Operator {
 	protected State state;
-	protected final int nbOperand;
-	
-	Operator(State state, int nbOperand){
+
+	Operator(State state) {
 		this.state = state;
-		this.nbOperand = nbOperand;
-		
 	}
 
 	public void execute() {
 		try {
-			if(canExecute()) {
-				run();
-			}
-		} catch (OperatorException e) {
-			e.printStackTrace();
+			if (valid()) run();
+		} catch (Exception e) {
+			state.setError(e);
 		}
-		
 	}
-	
-	
-	public boolean canExecute() throws OperatorException {
-		if(state.stackSize() < nbOperand-1)
-			throw new OperatorException("Not enough operands");
+
+	protected boolean valid() throws Exception {
 		return !state.hasError();
 	}
-	
-	protected abstract void run()throws OperatorException;
-	
-	
-	
-	@SuppressWarnings("serial")
-	public static class OperatorException extends Exception {
 
-		public OperatorException(String string) {
-			super(string);
-		}
-	}
+	protected abstract void run() throws Exception;
+
+	// ========================================================================
+
 	public abstract static class UnaryOperator extends Operator {
-		public UnaryOperator() {
-			super(state, 1);
-		}
-		
-		public void run() throws OperatorException {
-			state.pushDisplay();
-			double b = state.pop();
-			double a = state.pop();
-			
+		public UnaryOperator(State state) { super(state); }
+		abstract protected double op(double a);
+		protected void run() {
+			double a = state.getDisplay();
 			double r = op(a);
-			
-			state.setDisplay(Double.toString(r));
-			
-			state.push(r);
+			state.setDisplay(r);
 		}
-		
-		
-		abstract public double op(double a);
-	}	
+	}
+
 	public abstract static class BinaryOperator extends Operator {
+		BinaryOperator(State state) { super(state); }
+		abstract protected double op(double a, double b);
 
-		BinaryOperator(State state) {
-			super(state, 2);
+		protected boolean valid() throws Exception {
+			if (state.stackSize() < 1) throw new Exception("Not enough operands");
+			return super.valid();
 		}
-		
-		public void run() throws OperatorException {
-			state.pushDisplay();
-			double b = state.pop();
+
+		protected void run() {
+			double b = state.getDisplay();
 			double a = state.pop();
-			
-			double r = op(a,b);
-			
-			state.setDisplay(Double.toString(r));
+			double r = op(a, b);
+			state.setDisplay(r);
 		}
-		
-		abstract public double op(double a, double b) ;
 	}
-	
+
+	public abstract static class DisplayOperator extends Operator {
+		DisplayOperator(State state) { super(state); }
+		abstract protected String apply(String value);
+		protected void run() {
+			String input = state.getInput();
+			String result = apply(input);
+			state.setInput(result);
+		}
+	}
+
+	// ========================================================================
+
 	public static class Add extends BinaryOperator {
-
-		Add(State state) {
-			super(state);
-		}
-
-		public double op(double a, double b) {
-			return a+b;
-		}
-
-
+		Add(State state) { super(state); }
+		public double op(double a, double b) { return a + b; }
 	}
-	public static class Substract extends BinaryOperator{
 
-		Substract(State state) {
-			super(state);			
-		}
+	public static class Subtract extends BinaryOperator {
+		Subtract(State state) { super(state); }
+		protected double op(double a, double b) { return a - b; }
+	}
 
-		public double op(double a, double b) {
-			return a-b;
-		}		
-	 }
-	 
 	public static class Multiply extends BinaryOperator {
-
-		Multiply(State state) {
-			super(state);
-		}
-
-		public double op(double a, double b) {
-			return a*b;
-		}
+		Multiply(State state) { super(state); }
+		protected double op(double a, double b) { return a * b; }
 	}
-	
+
 	public static class Divide extends BinaryOperator {
-
-		Divide(State state) {
-			super(state);
-		}
-
-		public double op(double a, double b) {
-			return a/b;
-		}		
+		Divide(State state) { super(state); }
+		protected double op(double a, double b) { return a / b; }
 	}
-	
-	public static class SquareRoot extends Operator {
 
-		SquareRoot(State state) {
-			super(state, 1);
-		}
+	// ========================================================================
 
-		protected void run() throws OperatorException {
-			state.push(Math.sqrt(state.pop()));			
-		}
+	public static class SquareRoot extends UnaryOperator {
+		SquareRoot(State state) { super(state); }
+		protected double op(double a) { return Math.sqrt(a); }
 	}
-	public static class Square extends Operator {
 
-		Square(State state) {
-			super(state, 1);
-		}
-
-		protected void run() throws OperatorException {
-			state.push(Math.pow(state.pop(), 2));
-		}
+	public static class Square extends UnaryOperator {
+		Square(State state) { super(state); }
+		protected double op(double a) { return a * a; }
 	}
-	
-	public static class Inverse extends Operator {
 
-		Inverse(State state) {
-			super(state, 1);
-		}
-
-		protected void run() throws OperatorException {
-			state.push(Math.pow(state.pop(), -1));
-		}
+	public static class Inverse extends UnaryOperator {
+		Inverse(State state) { super(state); }
+		protected double op(double a) { return 1.0 / a; }
 	}
-	
+
+	public static class Opposite extends UnaryOperator {
+		Opposite(State state) { super(state); }
+		protected double op(double a) { return -a; }
+	}
+
+	// ========================================================================
+
 	public static class Clear extends Operator {
-
-		Clear(State state, int nbOperand) {
-			super(state, 0);
-		}
-
-		protected void run() throws OperatorException {
-			state.setDisplay("");
-			state.setError(false);
-			state.emptyStack();
-		}
-		
+		Clear(State state) { super(state); }
+		protected boolean valid() { return true; }
+		protected void run() { state.clearAll(); }
 	}
-	
+
 	public static class ClearError extends Operator {
-		
-		ClearError(State state, int nbOperand) {
-			super(state, 0);
-		}
-
-		protected void run() throws OperatorException {
-			state.setDisplay("");
-			state.setError(false);
-		}		
+		ClearError(State state) { super(state); }
+		protected boolean valid() { return true; }
+		protected void run() { state.clearError(); }
 	}
-	
+
+	// ========================================================================
+
 	public static class MemoryRecall extends Operator {
-
-		MemoryRecall(State state) {
-			super(state, 0);
-		}
-
-		protected void run() throws OperatorException {			
-			state.setDisplay(Double.toString(state.getMemory()));
-		}
-		
+		MemoryRecall(State state) { super(state); }
+		protected void run() { state.setDisplay(state.getMemory()); }
 	}
-	
+
 	public static class MemoryStore extends Operator {
-
-		MemoryStore(State state) {
-			super(state, 0);
-		}
-		
-		protected void run() throws OperatorException {
-			state.setMemory(Double.valueOf(state.getDisplay()));
-		}		
+		MemoryStore(State state) { super(state); }
+		protected void run() { state.setMemory(state.getDisplay()); }
 	}
-	
-	public static class Backspace extends Operator {
 
-		Backspace(State state) {
-			super(state, 0);
-		}
-		
-		protected void run() throws OperatorException {
-			String s = state.getDisplay();
-			if(s.length() > 0);
-				state.setDisplay(s.substring(0, s.length()-1));
-		}
-	}
-	
 	public static class Enter extends Operator {
-
-		Enter(State state) {
-			super(state, 0);
-		}
-
-		protected void run() throws OperatorException {
-			state.push(Double.valueOf(state.getDisplay()));
-			state.setDisplay("");
-		}
-		
+		Enter(State state) { super(state); }
+		protected void run() { state.pushDisplay(); }
 	}
-	public static class Opposite extends Operator {
 
-		Opposite(State state) {
-			super(state, 0);
-		}
+	// ========================================================================
 
-		protected void run() throws OperatorException {
-			state.setDisplay(Double.toString((Double.valueOf(state.getDisplay())*-1)));
-		}
-		
-	}
-	public static class Number extends Operator {
+	public static class Backspace extends DisplayOperator {
+		Backspace(State state) { super(state); }
 
-		int value;
-		
-		Number(State state, int value) {
-			super(state, 0);
-			this.value = value;
-		}
-
-		protected void run() throws OperatorException {
-			
+		protected String apply(String input) {
+			if (input.length() > 0) input = input.substring(0, input.length() - 1);
+			return input;
 		}
 	}
-	
-	public static class Dot extends Number {
 
-		Dot(State state) {
+	public static class Digit extends DisplayOperator {
+		char digit;
+
+		Digit(State state, char digit) {
 			super(state);
-			// TODO Auto-generated constructor stub
-		}}
+			this.digit = digit;
+		}
+
+		/*protected boolean valid() throws Exception {
+			return super.valid() && state.getInput().length() < 10;
+		}*/
+
+		protected String apply(String input) {
+			return input + digit;
+		}
+	}
+
+	public static class Zero extends Digit {
+		Zero(State state) { super(state, '0'); }
+
+		protected boolean valid() throws Exception {
+			return super.valid() && state.getInput().length() > 0;
+		}
+	}
+
+	public static class Dot extends Digit {
+		Dot(State state) { super(state, '.'); }
+
+		protected boolean valid() throws Exception {
+			return super.valid() && state.getInput().indexOf('.') == -1;
+		}
+
+		protected String apply(String input) {
+			return super.apply(input.length() < 1 ? "0" : input);
+		}
+	}
 }
 
