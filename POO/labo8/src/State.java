@@ -3,7 +3,7 @@ import java.util.Stack;
 public class State {
 	private Stack<Double> stack = new Stack<>();
 
-	private double display;
+	private double result;
 	private double memory;
 	private String input;
 	private String error;
@@ -20,7 +20,7 @@ public class State {
 	}
 
 	public void clearDisplay() {
-		display = 0.0;
+		result = 0.0;
 		input = null;
 	}
 
@@ -32,19 +32,15 @@ public class State {
 		} else if (input != null) {
 			return input.length() == 0 ? "0" : input;
 		} else {
-			long ipart = (long) display;
-			double fpart = display - ipart;
-			if (fpart == 0) {
-				return Long.toString(ipart);
-			} else {
-				return Double.toString(display);
-			}
+			long ipart = (long) result;
+			double fpart = result - ipart;
+			return fpart == 0 ? Long.toString(ipart) : Double.toString(result);
 		}
 	}
 
 	public Object[] getStackArray() {
 		if (stackSize() < 1) {
-			return new String[]{"<empty stack>"};
+			return new String[]{"< empty stack >"};
 		}
 
 		int size = stack.size();
@@ -59,13 +55,13 @@ public class State {
 
 	// ========================================================================
 
-	public double getDisplay() {
+	public double getResult() {
 		if (input != null) return Double.valueOf(input);
-		else return display;
+		else return result;
 	}
 
-	public void setDisplay(Double value) {
-		display = value;
+	public void setResult(Double value) {
+		result = value;
 		input = null;
 	}
 
@@ -81,8 +77,8 @@ public class State {
 
 	// ========================================================================
 
-	public void pushDisplay() {
-		stack.push(getDisplay());
+	public void pushResult() {
+		stack.push(getResult());
 		clearDisplay();
 	}
 

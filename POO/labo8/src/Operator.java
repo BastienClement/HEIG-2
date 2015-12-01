@@ -26,9 +26,9 @@ public abstract class Operator {
 		public UnaryOperator(State state) { super(state); }
 		abstract protected double op(double a);
 		protected void run() {
-			double a = state.getDisplay();
+			double a = state.getResult();
 			double r = op(a);
-			state.setDisplay(r);
+			state.setResult(r);
 		}
 	}
 
@@ -42,10 +42,10 @@ public abstract class Operator {
 		}
 
 		protected void run() {
-			double b = state.getDisplay();
+			double b = state.getResult();
 			double a = state.pop();
 			double r = op(a, b);
-			state.setDisplay(r);
+			state.setResult(r);
 		}
 	}
 
@@ -121,17 +121,17 @@ public abstract class Operator {
 
 	public static class MemoryRecall extends Operator {
 		MemoryRecall(State state) { super(state); }
-		protected void run() { state.setDisplay(state.getMemory()); }
+		protected void run() { state.setResult(state.getMemory()); }
 	}
 
 	public static class MemoryStore extends Operator {
 		MemoryStore(State state) { super(state); }
-		protected void run() { state.setMemory(state.getDisplay()); }
+		protected void run() { state.setMemory(state.getResult()); }
 	}
 
 	public static class Enter extends Operator {
 		Enter(State state) { super(state); }
-		protected void run() { state.pushDisplay(); }
+		protected void run() { state.pushResult(); }
 	}
 
 	// ========================================================================
@@ -140,7 +140,7 @@ public abstract class Operator {
 		Backspace(State state) { super(state); }
 
 		protected String apply(String input) {
-			if (input.length() > 0) input = input.substring(0, input.length() - 1);
+			if (!input.isEmpty()) input = input.substring(0, input.length() - 1);
 			return input;
 		}
 	}
@@ -153,10 +153,6 @@ public abstract class Operator {
 			this.digit = digit;
 		}
 
-		/*protected boolean valid() throws Exception {
-			return super.valid() && state.getInput().length() < 10;
-		}*/
-
 		protected String apply(String input) {
 			return input + digit;
 		}
@@ -166,7 +162,7 @@ public abstract class Operator {
 		Zero(State state) { super(state, '0'); }
 
 		protected boolean valid() throws Exception {
-			return super.valid() && state.getInput().length() > 0;
+			return !state.getInput().isEmpty() && super.valid();
 		}
 	}
 
@@ -174,11 +170,11 @@ public abstract class Operator {
 		Dot(State state) { super(state, '.'); }
 
 		protected boolean valid() throws Exception {
-			return super.valid() && state.getInput().indexOf('.') == -1;
+			return state.getInput().indexOf('.') == -1 && super.valid();
 		}
 
 		protected String apply(String input) {
-			return super.apply(input.length() < 1 ? "0" : input);
+			return super.apply(input.isEmpty() ? "0" : input);
 		}
 	}
 }
