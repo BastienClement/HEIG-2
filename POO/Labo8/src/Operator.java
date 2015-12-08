@@ -172,7 +172,7 @@ public abstract class Operator {
 	 */
 	public static class Add extends BinaryOperator {
 		Add(State state) { super(state); }
-		public double op(double a, double b) { return a + b; }
+		protected double op(double a, double b) { return a + b; }
 	}
 
 	/**
