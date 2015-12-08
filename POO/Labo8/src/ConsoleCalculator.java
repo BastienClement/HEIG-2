@@ -35,7 +35,7 @@ public class ConsoleCalculator {
 	 *
 	 * @param args Les paramètres reçus depuis la ligne de commande
 	 */
-	ConsoleCalculator(String... args) {
+	public ConsoleCalculator(String... args) {
 		operators.put("+", new Operator.Add(state));
 		operators.put("-", new Operator.Subtract(state));
 		operators.put("*", new Operator.Multiply(state));

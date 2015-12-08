@@ -50,7 +50,7 @@ public class State {
 	/**
 	 * Constructeur, initialise correctement toutes les propriétés
 	 */
-	State() { clearAll(); }
+	public State() { clearAll(); }
 
 	/**
 	 * Réinitialise entièrement l'état de la calculatrice.

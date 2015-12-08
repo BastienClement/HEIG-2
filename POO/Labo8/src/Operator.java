@@ -101,7 +101,7 @@ public abstract class Operator {
 	 * les opérandes de l'opérateur et retourne le résultat.
 	 */
 	public abstract static class BinaryOperator extends Operator {
-		BinaryOperator(State state) { super(state); }
+		public BinaryOperator(State state) { super(state); }
 
 		/**
 		 * Effectue l'opération "a op b"
@@ -143,7 +143,7 @@ public abstract class Operator {
 	 * la valeur actuel du buffer d'entrée et retourne sa nouvelle valeur.
 	 */
 	public abstract static class DisplayOperator extends Operator {
-		DisplayOperator(State state) { super(state); }
+		public DisplayOperator(State state) { super(state); }
 
 		/**
 		 * Transforme le buffer d'entrée utilisateur pour y appliquer
@@ -171,7 +171,7 @@ public abstract class Operator {
 	 * Addition
 	 */
 	public static class Add extends BinaryOperator {
-		Add(State state) { super(state); }
+		public Add(State state) { super(state); }
 		protected double op(double a, double b) { return a + b; }
 	}
 
@@ -179,7 +179,7 @@ public abstract class Operator {
 	 * Soustraction
 	 */
 	public static class Subtract extends BinaryOperator {
-		Subtract(State state) { super(state); }
+		public Subtract(State state) { super(state); }
 		protected double op(double a, double b) { return a - b; }
 	}
 
@@ -187,7 +187,7 @@ public abstract class Operator {
 	 * Multiplication
 	 */
 	public static class Multiply extends BinaryOperator {
-		Multiply(State state) { super(state); }
+		public Multiply(State state) { super(state); }
 		protected double op(double a, double b) { return a * b; }
 	}
 
@@ -198,7 +198,7 @@ public abstract class Operator {
 	 * nombres à virgule flottante.
 	 */
 	public static class Divide extends BinaryOperator {
-		Divide(State state) { super(state); }
+		public Divide(State state) { super(state); }
 		protected double op(double a, double b) { return a / b; }
 	}
 
@@ -208,7 +208,7 @@ public abstract class Operator {
 	 * Racine carrée
 	 */
 	public static class SquareRoot extends UnaryOperator {
-		SquareRoot(State state) { super(state); }
+		public SquareRoot(State state) { super(state); }
 		protected double op(double a) { return Math.sqrt(a); }
 	}
 
@@ -216,7 +216,7 @@ public abstract class Operator {
 	 * "X à la 2"
 	 */
 	public static class Square extends UnaryOperator {
-		Square(State state) { super(state); }
+		public Square(State state) { super(state); }
 		protected double op(double a) { return a * a; }
 	}
 
@@ -224,7 +224,7 @@ public abstract class Operator {
 	 * L'inverse d'un nombre
 	 */
 	public static class Inverse extends UnaryOperator {
-		Inverse(State state) { super(state); }
+		public Inverse(State state) { super(state); }
 		protected double op(double a) { return 1.0 / a; }
 	}
 
@@ -232,7 +232,7 @@ public abstract class Operator {
 	 * L'opposé d'un nombre
 	 */
 	public static class Opposite extends UnaryOperator {
-		Opposite(State state) { super(state); }
+		public Opposite(State state) { super(state); }
 		protected double op(double a) { return -a; }
 	}
 
@@ -243,7 +243,7 @@ public abstract class Operator {
 	 * Cette opération est toujours disponible
 	 */
 	public static class Clear extends Operator {
-		Clear(State state) { super(state); }
+		public Clear(State state) { super(state); }
 		protected boolean valid() { return true; }
 		protected void run() { state.clearAll(); }
 	}
@@ -253,7 +253,7 @@ public abstract class Operator {
 	 * Cette opération est toujours disponible
 	 */
 	public static class ClearError extends Operator {
-		ClearError(State state) { super(state); }
+		public ClearError(State state) { super(state); }
 		protected boolean valid() { return true; }
 		protected void run() { state.clearError(); }
 	}
@@ -264,7 +264,7 @@ public abstract class Operator {
 	 * Récupère la valeur enregistrée dans la mémoire
 	 */
 	public static class MemoryRecall extends Operator {
-		MemoryRecall(State state) { super(state); }
+		public MemoryRecall(State state) { super(state); }
 		protected void run() { state.setResult(state.getMemory()); }
 	}
 
@@ -272,7 +272,7 @@ public abstract class Operator {
 	 * Enregistre la valeur courante dans la mémoire
 	 */
 	public static class MemoryStore extends Operator {
-		MemoryStore(State state) { super(state); }
+		public MemoryStore(State state) { super(state); }
 		protected void run() { state.setMemory(state.getResult()); }
 	}
 
@@ -280,7 +280,7 @@ public abstract class Operator {
 	 * Pousse la valeur courante sur la pile
 	 */
 	public static class Enter extends Operator {
-		Enter(State state) { super(state); }
+		public Enter(State state) { super(state); }
 		protected void run() { state.pushResult(); }
 	}
 
@@ -290,7 +290,7 @@ public abstract class Operator {
 	 * Retour arrière
 	 */
 	public static class Backspace extends DisplayOperator {
-		Backspace(State state) { super(state); }
+		public Backspace(State state) { super(state); }
 
 		protected String apply(String input) {
 			if (!input.isEmpty()) input = input.substring(0, input.length() - 1);
@@ -316,7 +316,7 @@ public abstract class Operator {
 		 * @param digit Le chiffre à ajouter au buffer d'entrée lors de
 		 *              l'execution de cette opération.
 		 */
-		Digit(State state, char digit) {
+		public Digit(State state, char digit) {
 			super(state);
 			this.digit = digit;
 		}
@@ -334,7 +334,7 @@ public abstract class Operator {
 	 * Il n'est pas possible d'insérer un zéro en début de nombre.
 	 */
 	public static class Zero extends Digit {
-		Zero(State state) { super(state, '0'); }
+		public Zero(State state) { super(state, '0'); }
 
 		protected boolean valid() throws Exception {
 			return !state.getInput().isEmpty() && super.valid();
@@ -348,7 +348,7 @@ public abstract class Operator {
 	 * 0 est automatiquement ajouté avant.
 	 */
 	public static class Dot extends Digit {
-		Dot(State state) { super(state, '.'); }
+		public Dot(State state) { super(state, '.'); }
 
 		protected boolean valid() throws Exception {
 			return state.getInput().indexOf('.') == -1 && super.valid();
