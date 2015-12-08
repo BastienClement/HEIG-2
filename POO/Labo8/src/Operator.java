@@ -19,7 +19,7 @@ public abstract class Operator {
 	 *
 	 * @param state L'état à manipuler par cet opérateur
 	 */
-	Operator(State state) {
+	protected Operator(State state) {
 		this.state = state;
 	}
 
@@ -73,7 +73,7 @@ public abstract class Operator {
 	 * de l'opérateur et retourne le résultat.
 	 */
 	public abstract static class UnaryOperator extends Operator {
-		public UnaryOperator(State state) { super(state); }
+		protected UnaryOperator(State state) { super(state); }
 
 		/**
 		 * Effectue l'opération "op a"
@@ -101,7 +101,7 @@ public abstract class Operator {
 	 * les opérandes de l'opérateur et retourne le résultat.
 	 */
 	public abstract static class BinaryOperator extends Operator {
-		public BinaryOperator(State state) { super(state); }
+		protected BinaryOperator(State state) { super(state); }
 
 		/**
 		 * Effectue l'opération "a op b"
@@ -143,7 +143,7 @@ public abstract class Operator {
 	 * la valeur actuel du buffer d'entrée et retourne sa nouvelle valeur.
 	 */
 	public abstract static class DisplayOperator extends Operator {
-		public DisplayOperator(State state) { super(state); }
+		protected DisplayOperator(State state) { super(state); }
 
 		/**
 		 * Transforme le buffer d'entrée utilisateur pour y appliquer
