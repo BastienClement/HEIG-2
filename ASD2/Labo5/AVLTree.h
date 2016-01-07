@@ -128,7 +128,7 @@ private:
 	//
 public:
 	void put(const KeyType &key, const ValueType &value) {
-		//root = put(root,key,value);
+		//root = put(root,key,value);/*
 
 		std::stack<Node **> stack;
 
@@ -150,7 +150,7 @@ public:
 
 			updateNodeSize(*cur);
 			*cur = restoreBalance(*cur);
-		}
+		}//*/
 
 
 	}
@@ -300,7 +300,7 @@ private:
 	//
 public:
 	void deleteElement(const KeyType &key) {
-		//root = deleteElement(root, key);
+		//root = deleteElement(root, key);/*
 
 		std::stack<Node **> stack;
 
@@ -330,7 +330,7 @@ public:
 
 			updateNodeSize(*cur);
 			*cur = restoreBalance(*cur);
-		}
+		}//*/
 	}
 
 private:
