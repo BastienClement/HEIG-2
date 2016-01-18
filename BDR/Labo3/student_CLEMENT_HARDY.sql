@@ -23,7 +23,7 @@ ORDER BY customer_id DESC;
 
 -- Exercice 03
 SELECT 
-    customer_id as numéro, first_name as prénom, last_name as nom
+    customer_id AS numéro, first_name AS prénom, last_name AS nom
 FROM
     customer
 INNER JOIN
@@ -36,7 +36,7 @@ ORDER BY last_name;
 
 -- Exercice 04
 SELECT 
-    country as pays, city as ville, postal_code as npa
+    country AS pays, city AS ville, postal_code AS npa
 FROM
     city
 INNER JOIN
@@ -74,8 +74,8 @@ ORDER BY
 
 -- Exercice 06
 SELECT DISTINCT
-    cl.customer_id as customer1_id, cl.first_name as customer1_first_name, cl.last_name as customer1_last_name, 
-	cr.customer_id as customer2_id, cr.first_name as customer2_first_name, cr.last_name as customer2_last_name
+    cl.customer_id AS customer1_id, cl.first_name AS customer1_first_name, cl.last_name AS customer1_last_name, 
+	cr.customer_id AS customer2_id, cr.first_name AS customer2_first_name, cr.last_name AS customer2_last_name
 FROM
     rental AS l
 CROSS JOIN
@@ -164,7 +164,7 @@ HAVING
 
 -- Exercice 09a
 SELECT 
-    title as titre, COUNT(*) AS nombre_acteurs
+    title AS titre, COUNT(*) AS nombre_acteurs
 FROM
     film
 INNER JOIN
@@ -183,7 +183,7 @@ ORDER BY
 
 -- Exercice 09b
 SELECT 
-    title as titre, COUNT(*) AS nombre_acteurs
+    title AS titre, COUNT(*) AS nombre_acteurs
 FROM
     film
 INNER JOIN
@@ -204,7 +204,7 @@ ORDER BY
 
 -- Exercice 10
 SELECT 
-    category.category_id as id, name as nom, COUNT(*) AS nb_films_associés
+    category.category_id AS id, name AS nom, COUNT(*) AS nb_films_associés
 FROM
     category
 INNER JOIN
@@ -219,7 +219,7 @@ ORDER BY
 
 -- Exercice 11
 SELECT 
-	film_id as id_min, title as titre_min, length as durée_min
+	film_id AS id_min, title AS titre_min, length AS durée_min
 FROM
 	film
 WHERE
@@ -247,7 +247,7 @@ HAVING
 
 -- Exercice 13a
 SELECT
-	film.film_id as id, title as titre
+	film.film_id AS id, title AS titre
 FROM 
 	film
 WHERE 
@@ -272,7 +272,7 @@ ORDER BY
 
 -- Exercice 13b
 SELECT 
-	film.film_id as id, title as titre
+	film.film_id AS id, title AS titre
 FROM 
 	film
 INNER JOIN
@@ -285,7 +285,7 @@ INNER JOIN
 			actor_id
 		HAVING 
 			count(*) > 35
-	) as a ON a.film_id = film.film_id
+	) AS a ON a.film_id = film.film_id
 WHERE 
 	film.film_id < 100
 ORDER BY 
@@ -294,7 +294,7 @@ ORDER BY
 
 -- Exercice 14
 SELECT
-	film_id, title, rental_rate as prix
+	film_id, title, rental_rate AS prix
 FROM
 	film
 WHERE
@@ -308,15 +308,15 @@ WHERE
 
 -- Exercice 15
 SELECT
-	SUM(length)/(16*60) as jours
+	SUM(length)/(16*60) AS jours
 FROM
 	film;
 -- END Exercice 15
 
 -- Exercice 16
 SELECT
-	customer.customer_id as id, last_name as nom, first_name as prénom, country as pays,
-	count(inventory.inventory_id) as nombre_films_total, SUM(film.rental_rate) as total_dépense, AVG(film.rental_rate) as dépense_moyenne
+	customer.customer_id AS id, last_name AS nom, first_name AS prénom, country AS pays,
+	count(inventory.inventory_id) AS nombre_films_total, SUM(film.rental_rate) AS total_dépense, AVG(film.rental_rate) AS dépense_moyenne
 FROM
 	customer
 INNER JOIN
@@ -344,7 +344,7 @@ ORDER BY
 
 -- Exercice 17a
 SELECT 
-	customer_id as id, last_name as nom, first_name as prénom, country as pays
+	customer_id AS id, last_name AS nom, first_name AS prénom, country AS pays
 FROM
 	customer
 INNER JOIN
@@ -354,7 +354,7 @@ INNER JOIN
 INNER JOIN
 	country ON country.country_id = city.country_id
 WHERE 
-	country IN ("France", "Japan")
+	(country = "France" OR country = "Japan")
 	AND EXISTS (
 				SELECT DISTINCT 
 					customer_id
@@ -370,7 +370,7 @@ ORDER BY
 
 -- Exercice 17b
 SELECT 
-	customer_id as id, last_name as nom, first_name as prénom, country as pays
+	customer_id AS id, last_name AS nom, first_name AS prénom, country AS pays
 FROM
 	customer
 INNER JOIN
@@ -395,7 +395,7 @@ ORDER BY
 
 -- Exercice 17c
 SELECT
-	customer.customer_id as id, last_name as nom, first_name as prénom, country as pays
+	customer.customer_id AS id, last_name AS nom, first_name AS prénom, country AS pays
 FROM
 	customer
 INNER JOIN
@@ -407,7 +407,7 @@ INNER JOIN
 INNER JOIN
 	rental ON rental.customer_id = customer.customer_id
 WHERE 
-	country IN ("France", "Japan")
+	(country = "France" OR country = "Japan")
     AND return_date IS NULL
 GROUP BY
 	id
