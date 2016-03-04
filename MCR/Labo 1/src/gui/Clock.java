@@ -8,7 +8,6 @@ import javax.swing.*;
 
 public class Clock extends JPanel implements Observer {
 	protected StopWatch stopWatch;
-	protected long time;
 
 	public Clock(StopWatch sw) {
 		stopWatch = sw;
@@ -18,7 +17,6 @@ public class Clock extends JPanel implements Observer {
 	}
 
 	public void update() {
-		time = stopWatch.getTime();
 		repaint();
 	}
 

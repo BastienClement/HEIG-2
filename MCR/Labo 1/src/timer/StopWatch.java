@@ -14,7 +14,7 @@ public class StopWatch extends Observable {
 	public void start() {
 		if (timer != null) return;
 		timer = new Timer(true);
-		timer.scheduleAtFixedRate(ticker(), 0, interval);
+		timer.scheduleAtFixedRate(ticker(), interval, interval);
 	}
 
 	private TimerTask ticker() {

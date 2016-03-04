@@ -6,7 +6,7 @@ public abstract class Observable {
 	private LinkedList<Observer> observers = new LinkedList<>();
 
 	public void addObserver(Observer observer) {
-		observers.remove(observer);
+		removeObserver(observer);
 		observers.add(observer);
 	}
 

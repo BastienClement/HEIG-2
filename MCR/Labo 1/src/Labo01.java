@@ -51,7 +51,7 @@ public class Labo01 {
 		container.add(btn);
 	}
 
-	private static void openClock(Clock... clocks) {
+	private static void openClock(Clock ...clocks) {
 		JFrame window = new JFrame();
 		window.setLayout(new FlowLayout());
 

@@ -35,11 +35,11 @@ public class AnalogClock extends Clock {
 
 		double seconds = ((double) stopWatch.getTime()) / 1000;
 		double minutes = seconds / 60;
-		double hours   = seconds / 60 / 60;
+		double hours   = minutes / 60;
 
 		Graphics2D g2 = (Graphics2D) g;
 
-		drawLine(g2, hours,   24, 6, CLOCK_SIZE / 5, 0x000000);
+		drawLine(g2, hours,   12, 6, CLOCK_SIZE / 5, 0x000000);
 		drawLine(g2, minutes, 60, 4, CLOCK_SIZE / 3, 0x000000);
 		drawLine(g2, seconds, 60, 2, CLOCK_SIZE / 3, 0xFF0000);
 	}
