@@ -6,3 +6,4 @@
 .Rhistory
 /PST/*/*.pdf
 *.Rproj
+*.pro.user
