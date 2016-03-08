@@ -3,7 +3,6 @@ package gui;
 import timer.StopWatch;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class DigitalClock extends Clock {
 	JLabel label = new JLabel("00:00:00.0");
@@ -13,7 +12,7 @@ public class DigitalClock extends Clock {
 		add(label);
 	}
 
-	public void paintComponent(Graphics g) {
+	public void update() {
 		long time = stopWatch.getTime();
 
 		long millis  = time % 1000;

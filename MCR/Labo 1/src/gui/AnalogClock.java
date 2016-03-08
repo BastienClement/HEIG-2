@@ -12,10 +12,12 @@ public class AnalogClock extends Clock {
 	private int width, height;
 	private Image img;
 
-	public AnalogClock(ClockFace face, StopWatch sw) {
+	public AnalogClock(ClockFace face, StopWatch sw, boolean elastic) {
 		super(sw);
 		this.face = face;
-		setPreferredSize(new Dimension(CLOCK_SIZE, CLOCK_SIZE));
+		if (!elastic) {
+			setPreferredSize(new Dimension(CLOCK_SIZE, CLOCK_SIZE));
+		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -49,5 +51,9 @@ public class AnalogClock extends Clock {
 		g2.setColor(new Color(color));
 		double alpha = (val / max) * (Math.PI * 2);
 		g2.drawLine(0, 0, (int) (Math.sin(alpha) * length), (int) (-Math.cos(alpha) * length));
+	}
+
+	public void update() {
+		repaint();
 	}
 }

@@ -20,14 +20,23 @@ public class Labo01 {
 		// Clock-related buttons
 		JPanel clocks_btns = new JPanel();
 		clocks_btns.setLayout(new FlowLayout());
-		addButton(clocks_btns, "Horloge romaine",   (e) -> openClock(new AnalogClock(ClockFace.ROMAN, sw)));
-		addButton(clocks_btns, "Horloge arabe",     (e) -> openClock(new AnalogClock(ClockFace.ARABIC, sw)));
-		addButton(clocks_btns, "Horloge numérique", (e) -> openClock(new DigitalClock(sw)));
-		addButton(clocks_btns, "Horloge mixte",     (e) -> openClock(
-				new AnalogClock(ClockFace.ROMAN, sw),
-				new AnalogClock(ClockFace.ARABIC, sw),
-				new DigitalClock(sw)
-		));
+
+		addButton(clocks_btns, "Horloge romaine",
+				(e) -> openClockPanel(new AnalogClock(ClockFace.ROMAN, sw, true)));
+
+		addButton(clocks_btns, "Horloge arabe",
+				(e) -> openClockPanel(new AnalogClock(ClockFace.ARABIC, sw, true)));
+
+		addButton(clocks_btns, "Horloge numérique",
+				(e) -> openClockPanel(new DigitalClock(sw)));
+
+		addButton(clocks_btns, "Horloge mixte",
+				(e) -> openClockPanel(
+					new AnalogClock(ClockFace.ROMAN, sw, false),
+					new AnalogClock(ClockFace.ARABIC, sw, false),
+					new DigitalClock(sw)
+				));
+
 		window.add(clocks_btns);
 
 		// Timer-related buttons
@@ -51,9 +60,12 @@ public class Labo01 {
 		container.add(btn);
 	}
 
-	private static void openClock(Clock ...clocks) {
+	private static void openClockPanel(Clock ...clocks) {
 		JFrame window = new JFrame();
-		window.setLayout(new FlowLayout());
+
+		if (clocks.length > 1) {
+			window.setLayout(new FlowLayout());
+		}
 
 		for (Clock clock : clocks) {
 			window.add(clock);
