@@ -1,3 +1,11 @@
+/**
+ * Labo 01 - Observer Pattern
+ * CloseListener.java
+ *
+ * @author Bastien Clément
+ * @author Alain Hardy
+ */
+
 package utils;
 
 import java.awt.event.WindowEvent;

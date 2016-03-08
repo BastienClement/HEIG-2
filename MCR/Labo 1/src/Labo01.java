@@ -1,3 +1,11 @@
+/**
+ * Labo 01 - Observer Pattern
+ * Labo01.java
+ *
+ * @author Bastien Clément
+ * @author Alain Hardy
+ */
+
 import gui.AnalogClock;
 import gui.Clock;
 import gui.ClockFace;
@@ -28,14 +36,14 @@ public class Labo01 {
 				(e) -> openClockPanel(new AnalogClock(ClockFace.ARABIC, sw, true)));
 
 		addButton(clocks_btns, "Horloge numérique",
-				(e) -> openClockPanel(new DigitalClock(sw)));
+				(e) -> openClockPanel(new DigitalClock(sw)).pack());
 
 		addButton(clocks_btns, "Horloge mixte",
 				(e) -> openClockPanel(
 					new AnalogClock(ClockFace.ROMAN, sw, false),
 					new AnalogClock(ClockFace.ARABIC, sw, false),
 					new DigitalClock(sw)
-				));
+				).pack());
 
 		window.add(clocks_btns);
 
@@ -60,11 +68,14 @@ public class Labo01 {
 		container.add(btn);
 	}
 
-	private static void openClockPanel(Clock ...clocks) {
+	private static JFrame openClockPanel(Clock ...clocks) {
 		JFrame window = new JFrame();
 
 		if (clocks.length > 1) {
 			window.setLayout(new FlowLayout());
+		} else {
+			window.setLayout(new GridLayout());
+			window.setSize(AnalogClock.DEFAULT_CLOCK_SIZE, AnalogClock.DEFAULT_CLOCK_SIZE);
 		}
 
 		for (Clock clock : clocks) {
@@ -78,7 +89,7 @@ public class Labo01 {
 			}
 		});
 
-		window.pack();
 		window.setVisible(true);
+		return window;
 	}
 }
