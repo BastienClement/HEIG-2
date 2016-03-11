@@ -7,3 +7,7 @@
 /PST/*/*.pdf
 *.Rproj
 *.pro.user
+*.aux
+*.log
+*.synctex.gz
+
