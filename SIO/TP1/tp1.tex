@@ -1,0 +1,170 @@
+
+\documentclass[a4paper,11pt]{report}
+\usepackage[]{graphicx}
+\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+
+\usepackage{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{enumerate}
+\usepackage[T1]{fontenc}      
+\usepackage[utf8]{inputenc} 
+\usepackage[francais]{babel}  
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{parskip}
+\usepackage{listings}
+\pagestyle{fancy}
+\selectlanguage{francais}
+\linespread{1.1}
+
+\newcounter{numero}
+\newcommand{\exo}{{\Large \vspace*{2mm}\addtocounter{numero}{1}{\bf Problème~\thenumero}\\[2mm]}}
+
+\renewcommand{\headrulewidth}{1pt}
+\fancyhead[L]{\leftmark}
+\fancyhead[C]{\footnotesize SIO - TP1} 
+\fancyhead[R]{\footnotesize }
+
+\renewcommand{\footrulewidth}{1pt}
+\fancyfoot[L]{}
+\fancyfoot[C]{\textbf{Page \thepage}} 
+\fancyfoot[R]{\leftmark }
+\thispagestyle{empty} % Pour ne pas avoir de header/footer sur la premiÃ¨re page
+
+\begin{document}
+	
+{\sc HEIG--VD} \hfill Bastien Clément\newline 
+Simulation et Optimisation \hfill \today \newline
+\hrule
+\vspace{7mm}
+\noindent {\large \bf Rapport~:  Génération de variables aléatoires} \hfill {\large \bf Travail personnel~1}\\[3mm]
+\hrule
+\vspace{7mm}
+
+\exo
+\begin{enumerate}[\indent a)]\itemsep3mm\topsep0mm
+	
+\item Donner une définition par morceaux de $\tilde{f}(x)$.
+
+\begin{equation*}
+\tilde{f}(x) = \left\lbrace \begin{array}{ll}
+	0						& \text{si $x < x_0$} \\
+	m_0 ( x - x_0 ) + y_0	& \text{si $x_0 \leq x \leq x_0$} \\
+	0 						& \text{si $x > x_1$}
+\end{array} \right.
+\end{equation*}
+
+\item {\em On désire définir une variable aléatoire $X$ de densité $f(x)$ proportionnelle à $\tilde{f}(x)$. Déterminer la constante de proportionnalité, c.à-d. déterminer la constante $A_{0}$ telle que $f(x) = \frac{1}{A_{0}}\tilde{f}(x)$ soit une densité.}
+
+Puisque $A_{0}$ est une constante et que $f(x)$ est une densité, nous savons que
+
+\begin{equation*}
+	\int_{-\infty}^{\infty} f(x)\,dx =
+	\int_{x_0}^{x_1} \frac{1}{A_0} \tilde{f}(x)\,dx =
+	\frac{1}{A_0} \int_{x_0}^{x_1} \tilde{f}(x)\,dx = 1
+\end{equation*}
+
+Il n'est pas nécessaire de considérer les cas $x < x_0$ et $x > x_1$ puisque la fonction est nulle en dehors de l'intervalle $[x_0; x_1]$. Il alors est évident que
+
+\begin{equation*}
+	A_0 = \int_{x_0}^{x_1} \tilde{f}(x)dx
+\end{equation*}
+
+c'est à dire l'aire sous la courbe de $\tilde{f}(x)$ sur l'intervalle $[x_0; x_1]$. Dans notre cas, le problème est simplifié puisque nous avons un trapèze rectangle dont l'aire est donnée par le produit de la base moyenne et de la hauteur:
+
+\begin{equation*}
+	A_0 = \frac{y_0 + y_0}{2} \cdot (x_1 - x_0).
+\end{equation*}
+
+Nous pouvons finalement définir
+
+\begin{align*}
+	f(x) &= \frac{1}{A_0} \cdot  \tilde{f}(x) \\
+	     &= \frac{2}{(y_0 + y_1)(x_1 - x_0)} \cdot \tilde{f}(x)
+\end{align*}
+
+\item {\em Calculer l'espérance de la variable $X$, sans oublier de simplifier votre résultat.}
+
+L'espérance mathématique d'une variable aléatoire est définie par
+
+\begin{equation*}
+	\mathbb{E}[x] = \int_{-\infty}^{\infty} x f(x) dx
+\end{equation*}
+
+Dans notre cas, nous pouvons à nouveau nous limiter à l'intervalle $[x_{0}; x_{1}]$ puisque en dehors de cette intervalle, $f(x)=0$.
+
+\begingroup
+\addtolength{\jot}{1em}
+\begin{align*}
+\mathbb{E}[x] &= \frac{1}{A_0} \int_{x_0}^{x_1} x \tilde{f}(x) \,dx \\
+           &= \frac{2}{(y_0 + y_1)(x_1 - x_0)} \cdot \int_{x_0}^{x_1} x (m_0 \cdot (x - x_0) + y_0) \,dx \\
+           &= \frac{2}{(y_0 + y_1)(x_1 - x_0)} \cdot \left( \frac{x^2 \big(2x (y_0-y_1) + 3 x_0 y_1 - 3 x_1 y_0\big)}{6 (x_0-x_1)}+c \biggr\rvert^{x_1}_{x_0} \right) \\
+           &= \frac{2}{(y_0 + y_1)(x_1 - x_0)} \cdot \frac{\big(x_1-x_0\big) \big(x_0 (2 y_0+y_1)+x_1 (y_0+2 y_1)\big)}{6} \\
+           &= \frac{x_0 (2y_0 + y_1) + x_1 (y_0 + 2y_1)}{3 (y_0+y_1)}
+\end{align*}
+\endgroup
+
+\item {\em Vérifier que, dans le cas où $y_{0} \neq y_{1}$, la fonction de répartition de la variable $X$ est}
+
+\begin{equation*}
+	F(x) = P(X \leq x) = \left\lbrace \begin{array}{ll}
+		0						& \text{si $x < x_0$} \\
+		\frac{1}{y^2_1 - y^2_0} \left( \left( m_0 \left( x - x_0 \right) + y_0 \right)^2 - y^2_0 \right)	& \text{si $x_0 \leq x \leq x_0$} \\
+		1 						& \text{si $x > x_1$}
+	\end{array} \right.
+\end{equation*}
+
+{\em Le développement du point d) n'est pas demandé. }
+
+\item {\em Utiliser le résultat précédent pour proposer un algorithme permettant de générer des réalisations de la variable $X$ à l'aide de la méthode des fonctions inverses. Traiter séparément les cas $y_{0} = y_{1}$ et $y_{0} \neq y_{1}$.}
+
+Notre fonction de répartition $F(x)$ liée à $f(x)$ est définie comme une fonction $\mathbb{R} \rightarrow [0;1]$, mais en pratique le domaine intéressant se limite à $[x_0;x_1]$ puisque que $x < x_0 \implies F(X) = 0$ et $x > x_1 \implies F(X) = 1$.
+
+La méthode des fonctions inverses consiste à utiliser la réciproque  $F^{-1}(y) : [0;1] \rightarrow [x_0;x_1]$ et une variable $y \sim U(0, 1)$ pour déterminer une réalisation $x = F^{-1}(y)$ conforme à la densité de probabilité désirée pour $X$.
+
+\begingroup
+\addtolength{\jot}{1em}
+\begin{align*}
+	y &= \frac{1}{y^2_1 - y^2_0} \cdot \left( \left( m_0 \cdot  \left( x - x_0 \right) + y_0 \right)^2 - y^2_0 \right) \\
+	y \cdot (y_1^2 - y_0^2) + y^2_0 &=  \left( m_0 \cdot  \left( x - x_0 \right) + y_0 \right)^2\\
+	\pm \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0} &=  m_0 \cdot  \left( x - x_0 \right) + y_0 \\
+	\frac{\pm \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0} - y_0}{m_0} + x_0 &=  x
+\end{align*}
+\endgroup
+
+On constate que $m_0 = \frac{y_1-y_0}{x1_x0} \ne 0 \implies y_1-y_0 \ne 0 \implies y_1 \ne y_0$.
+
+Puisque $x \in [x_0,x_1]$ avec $x_0 < x_1$, nous pouvons ignorer le cas $-$ dans la définition de $F^{-1}$.
+
+\begin{equation*}
+	F^{-1}(y): [0;1] \rightarrow [x_0,x_1] = \left\lbrace \begin{array}{ll}
+		x_0 + \frac{- y_0 + \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0}}{m_0}
+		& \text{si $y_1 > y_0$} \\
+		x_0 + \frac{- y_0 - \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0}}{m_0}
+		& \text{si $y_1 < y_0$} \\
+	\end{array} \right.
+\end{equation*}
+
+L'algorithme de génération de réalisation est alors trivial.
+
+\begin{enumerate}[1]
+	\ttfamily
+	\item Générer $y \sim U(0, 1)$
+	\item Retourner $F^{-1}(y)$
+\end{enumerate}
+
+\item {\em Développer un algorithme permettant de générer des réalisations de la variable $X$ à l'aide d'une approche géométrique basée sur la méthode d'acceptation-rejet et en utilisant efficacement les symétries.}
+
+\end{enumerate}
+
+\exo
+
+
+
+\end{document}
