@@ -169,13 +169,32 @@ Dans le cas contraire, nous devons inverser $y = F(x)$ lorsque $x \in [x_0, x_1]
 	\frac{\pm \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0} - y_0}{m_0} + x_0 &=  x
 \end{align*}
 \endgroup
-
-Dans le cas contraire, nous devons déterminer le signe de la racine. La fonction $F(x)$ étant croissante, son inverse $F^{-1}(x)$ l'est également. Une étude des fonctions
+Nous avons donc deux candidats potentiels pour la fonction $F^{-1}(y)$:
 \begin{align*}
 	F^{-1}_a(y) &= \frac{+\sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0} - y_0}{m_0} + x_0 \\
 	F^{-1}_b(y) &= \frac{-\sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0} - y_0}{m_0} + x_0
 \end{align*}
-révèle que la fonction $F^{-1}_a$ est croissante, alors que la fonction $F^{-1}_b$ est décroissante. Nous pouvons alors définir:
+La fonction $F(x)$ étant croissante, son inverse $F^{-1}(x)$ l'est également. Afin de départager les deux cas, nous effectuons une étude de signe des dérivées de ces deux fonctions:
+\begin{align*}
+(F^{-1})'_a(y) &= +\frac{(x_1-x_0) \cdot (y_0+y_1)}{2 \sqrt{(1-y) \cdot y_0^2+y \cdot y_1^2}} \\
+(F^{-1})'_b(y) &= -\frac{(x_1-x_0) \cdot (y_0+y_1)}{2 \sqrt{(1-y) \cdot y_0^2+y \cdot y_1^2}}
+\end{align*}
+Nous appliquons les déductions suivantes à partir des contraintes de l'énoncé et du domaine de $F^{-1}$:
+\begin{align*}
+	x_1 > x_0 &\implies (x_1-x_0) > 0 \\
+	y_0, y_1 \ge 0 &\implies (y_0+y_1) \ge 0 \\
+	1 \ge y \ge 0 &\implies (1-y) \cdot y_0^2 \ge 0 \\
+	1 \ge y \ge 0 &\implies y \cdot y_1^2 \ge 0
+\end{align*}
+Nous en déduisons que pour le cas simplifié $y_0,y_1 \ne 0$:
+\begin{align*}
+\text{Sign}\left[(F^{-1})'_a(y)\right] &= 1 \\
+\text{Sign}\left[(F^{-1})'_b(y)\right] &= -1
+\end{align*}
+\begin{center}
+	\emph{(dans le cas général, le signe peut être nul)}
+\end{center}
+Autrement dit, $F^{-1}_a$ être croissante alors que $F^{-1}_b$ est décroissante et ne correspond donc pas au critère précédemment fixé. Nous pouvons alors définir:
 \begin{equation*}
 	F^{-1}(y): [0;1] \rightarrow [x_0,x_1] = \left\lbrace \begin{array}{ll}
 		x_0 + \frac{- y_0 + \sqrt{y \cdot (y_1^2 - y_0^2) + y^2_0}}{m_0}
@@ -186,23 +205,23 @@ révèle que la fonction $F^{-1}_a$ est croissante, alors que la fonction $F^{-1
 \end{equation*}
 
 L'algorithme de génération de réalisations est alors trivial:
-\begin{enumerate}[1]
-	\ttfamily
+
+\algo{Algorithme 1.e}{
 	\item Générer $y \sim \mathcal{U}(0, 1)$
 	\item Retourner $F^{-1}(y)$
-\end{enumerate}
+}
 
-\point{f}{\em Développer un algorithme permettant de générer des réalisations de la variable $X$ à l'aide d'une approche géométrique basée sur la méthode d'acceptation-rejet et en utilisant efficacement les symétries.}
+\point{f}{ Développer un algorithme permettant de générer des réalisations de la variable $X$ à l'aide d'une approche géométrique basée sur la méthode d'acceptation-rejet et en utilisant efficacement les symétries.}
 
 La méthode d'acceptation-rejet consiste à \emph{enfermer} notre fonction de densité $f(x)$ sous une fonction de densité $g(x)$ plus simple tel que $\forall x \in [x_0,x_1], f(x) \leq c \cdot g(x) \mid c \in \mathbb{R}$ pour laquelle nous savons générer des réalisations aléatoires. Nous retournerons alors des réalisations $y \sim g$ si $\mathcal{U}(0,1) \leq \frac{f(y)}{cg(y)}$.
 
-Dans notre cas, il n'est même pas nécessaire de respecter strictement le concept de fonction de densité et nous pouvons utiliser directement $\tilde{f}$ et une borne supérieure $y_m=y_0+y_1$, puis générer des réalisations $(a,b) \mid a \sim \mathcal{U}(x_0, x_1), b \sim \mathcal{U}(0, y_m)$ qui correspondent à des points uniformément distribués dans le rectangle sous la courbe de la fonction $g(x)=y_0+y_1$ sur l'intervalle $[x_0, x_1]$.
+Dans notre cas, il n'est même pas nécessaire de respecter strictement le concept de fonction de densité et nous pouvons utiliser directement $\tilde{f}$ et une borne supérieure $y_m=y_0+y_1$, puis générer des réalisations indépendantes $(a,b) \mid a \sim \mathcal{U}(x_0, x_1), b \sim \mathcal{U}(0, y_m)$ qui correspondent à des points uniformément distribués dans le rectangle sous la courbe de la fonction $g(x)=y_0+y_1$ sur l'intervalle $[x_0, x_1]$.
 
 \begin{center}\small
 	\renewcommand{\pshlabel}[1]{\scriptsize $#1$}
 	\renewcommand{\psvlabel}[1]{\scriptsize $#1$}
 	\psset{unit=1.5cm,linecolor=black,linewidth=0.5pt,fillstyle=none}
-	\begin{pspicture}(-0.5,-1)(3.5,3)
+	\begin{pspicture}(-0.5,-0.3)(3.7,2.8)
 	\psaxes[labels=none,ticks=none]{->}(0,0)(-0.25,-0.25)(3.5,2.5)
 	\uput[-90](3.5,0){$x$}
 	\uput[0](0,2.5){$\tilde{f}(x)$}
@@ -229,24 +248,55 @@ Dans notre cas, il n'est même pas nécessaire de respecter strictement le conce
 	\psline(1,2.25)(2.5,2.25)
 	\psline(2.5,2.25)(2.5,0)
 	
-	\end{pspicture}
+	\end{pspicture}\\
+	{\footnotesize Exemple de rectangle séparé en deux parts égales par $\tilde{f}$}
 \end{center}
 
 Nous retournerons alors $a$ si $b \leq \tilde{f}(a)$ est vérifié. Dans le cas contraire, de nouvelles réalisations de $a$ et $b$ devront être générées jusqu'à vérifier l'inégalité.
 
 Cependant, puisque le segment $\big\lbrace (x_0,y_0) , (x_1,y_1) \big\rbrace$ délimitant l'aire de la fonction $\tilde{f}$ divise le rectangle $\big\lbrace (x_0,0) , (x_1,0) , (x_1,y_0+y_1) , (x_0,y_0+y_1) \big\rbrace$ en deux parts égales, il est possible de \emph{rattraper le coup} lorsque le point $(a,b)$ est en dehors de l'aire de $\tilde{f}$ en effectuant une symétrie par rapport au centre du rectangle pour déplacer un point tombé dans la mauvaise part du rectangle.
 
-\begin{center}
-	\includegraphics[width=8cm]{img_graph4}\\
+
+\begin{center}\small
+	\renewcommand{\pshlabel}[1]{\scriptsize $#1$}
+	\renewcommand{\psvlabel}[1]{\scriptsize $#1$}
+	\psset{unit=1.5cm,linecolor=black,linewidth=0.5pt,fillstyle=none}
+	\begin{pspicture}(-0.5,-0.3)(3.7,2.8)
+	\psaxes[labels=none,ticks=none]{->}(0,0)(-0.25,-0.25)(3.5,2.5)
+	\uput[-90](3.5,0){$x$}
+	\uput[0](0,2.5){$\tilde{f}(x)$}
+	\psset{labelsep=6pt}
+	\uput[-90](1,0){$x_0$}
+	\uput[-90](2.5,0){$x_1$}
+	\psset{labelsep=3pt}
+	\uput[180](0,0.75){$y_0$}
+	\uput[180](0,1.5){$y_1$}
+	
+	
+	\uput[180](0,2.25){$y_m$}
+	
+	\psset{linecolor=red,linewidth=1.5pt}
+	\psline{-o}(-0.5,0)(1,0)
+	\psline{*-*}(1,0.75)(2.5,1.5)
+	\psline{o-}(2.5,0)(3.4,0)
+	
+	\psset{linecolor=blue,linewidth=0.5pt}
+	\psline(1,0)(1,2.25)
+	\psline(1,2.25)(2.5,2.25)
+	\psline(2.5,2.25)(2.5,0)
+	
+	\psset{linecolor=black,linewidth=0.5pt}
+	\psline[linestyle=dotted]{o-*}(2,1.75)(1.5,0.5)
+	\psline[linestyle=dotted]{o-*}(1.25,2)(2.25,0.25)
+	
+	\end{pspicture}\\
 	{\footnotesize Récupération de points dans la mauvaise part}
 \end{center}
 
 Nous avons donc l'algorithme suivant, sans possibilité de rejet:
 
-\fbox{\parbox{16.2cm}{
-\begin{enumerate}[\hspace{5mm}1 ]
-	\ttfamily
-	\item Générer $a \sim \mathcal{U}(x_0,x_1)$ et $b \sim \mathcal{U}(0,y_0+y_1)$
+\algo{Algorithme 1.f}{
+	\item Générer $a \sim \mathcal{U}(x_0,x_1)$ et $b \sim \mathcal{U}(0,y_0+y_1)$, indépendantes
 	\item Si $b \leq \tilde{f}(a)$ alors
 	\item \tab // Dans l'aire de $\tilde{f}(x)$
 	\item \tab Retourner $a$
@@ -254,12 +304,11 @@ Nous avons donc l'algorithme suivant, sans possibilité de rejet:
 	\item \tab // Hors de l'aire de $\tilde{f}(x)$, on prend la symétrie
 	\item \tab Retourner $x_1 - (a - x_0)$
 	\item Fin
-\end{enumerate}}}
+}
 
-\pagebreak
 \exo
 	
-{\em Déterminer la constante $A$ telle que $f=\frac{1}{A}\tilde{f}$ soit une densité}
+\point{a}{Déterminer la constante $A$ telle que $f=\frac{1}{A}\tilde{f}$ soit une densité}
 
 Idem que pour le premier problème, nous cherchons ici $A = \int_{-\infty}^{\infty} \tilde{f}(x)\,dx$, soit l'aire sous la courbe de notre fonction $\tilde{f}$ afin de réduire cette aire à 1. À nouveau, chaque tranche de la fonction est un trapèze rectangle dont l'aire peut être calculée facilement.
 \begin{align*}
@@ -269,7 +318,7 @@ Idem que pour le premier problème, nous cherchons ici $A = \int_{-\infty}^{\inf
 	  &= \frac{1}{2} \sum_{k=0}^{n-1} (y_{k+1} + y_k)(x_{k+1}-x_k)
 \end{align*}
 
-{\em Développer un algorithme pour générer des réalisations de la variable $X$ basé sur une application directe, "bête et méchante", de la méthode d'acceptation-rejet.}
+\point{b}{Développer un algorithme pour générer des réalisations de la variable $X$ basé sur une application directe, "bête et méchante", de la méthode d'acceptation-rejet.}
 
 La première étape consiste à déterminer le maximum $y_m$ de la fonction $\tilde{f}(x)$. Ce maximum correspond nécessairement à une valeur $y_k$ pour $k \in \lbrace 0,1,2,\dots,n \rbrace$.
 
@@ -277,20 +326,18 @@ Nous générons ensuite deux variables aléatoires $(x, y)$ indépendantes selon
 
 La dernière étape est de vérifier que $b \leq \tilde{f}(a)$, c'est à dire que le point $P(x, y)$ se situe sous la courbe de $\tilde{f}$. Si ce n'est pas le cas, nous effectuons un nouveau tirage des variables $x$ et $y$, jusqu'à ce que la condition soit vérifiée.
 
-\fbox{\parbox{16.75cm}{
-{\bf \vspace{2mm} Algorithme 2.b}
-\begin{enumerate}[\hspace{2.5mm}1 ]
+\algo{Algorithme 2.b}{
 	\ttfamily
 	\item Définir $y_m=\max(y_0, y_1, \dots, y_k)$
-	\item Générer $x \sim \mathcal{U}(a,b)$ et $y \sim \mathcal{U}(0,y_m)$
+	\item Générer $x \sim \mathcal{U}(a,b)$ et $y \sim \mathcal{U}(0,y_m)$, indépendantes
 	\item Si $y \leq \tilde{f}(x)$ alors
 	\item \tab Retourner $x$
 	\item Sinon
 	\item \tab Sauter à la ligne 2
 	\item Fin
-\end{enumerate}}}
+}
 
-{\em Développer un algorithme pour générer des réalisations de la variable $X$ basé sur la méthode des mélanges et sur la méthode développée au point f) du problème précédent.}
+\point{c}{Développer un algorithme pour générer des réalisations de la variable $X$ basé sur la méthode des mélanges et sur la méthode développée au point f) du problème précédent.}
 
 Un des concepts de la méthode des mélanges est d'associer à chaque élément une probabilité $p_k$ proportionnelle à la part d'impact de l'élément sur l'ensemble du mélange et $\sum_{k=0}^{n-1} p_k = 1$.
 
@@ -322,82 +369,5 @@ Une fois la tranche choisie, nous pouvons appliquer l'algorithme du point 1.f av
 	\item \tab $y_0,\,y_1 = y_j,\,y_{j+1}$
 	\item \tab $\tilde{f}(x) = \tilde{f}_j(x)$
 }
-
-\begin{center}\small
-	\renewcommand{\pshlabel}[1]{\scriptsize $#1$}
-	\renewcommand{\psvlabel}[1]{\scriptsize $#1$}
-	\psset{unit=1.5cm,linecolor=black,linewidth=0.5pt,fillstyle=none}
-	\begin{pspicture}(-0.5,-0.5)(8,3.25)
-	\psaxes[labels=none,ticks=none]{->}(0,0)(-0.25,-0.25)(8,3)
-	\uput[-90](8,0){$x$}
-	\uput[0](0,3){$\tilde{f}(x)$}
-	\psline[linestyle=dashed](1,0)(1,0.75)(0,0.75)
-	\psline[linestyle=dashed](2,0)(2,1.5)(0,1.5)
-	\psline[linestyle=dashed](2.75,0)(2.75,2.5)(0,2.5)
-	\psline[linestyle=dashed](3.5,0)(3.5,2)
-	\psline[linestyle=dashed](6,0)(6,1.75)
-	\psline[linestyle=dashed](7,0)(7,1)
-	\psset{labelsep=6pt}
-	\uput[-90](1,0){$x_0=a$}
-	\uput[-90](2,0){$x_1$}
-	\uput[-90](2.75,0){$x_2$}
-	\uput[-90](3.5,0){$x_3$}
-	\uput[-90](6,0){$x_{n-1}$}
-	\psset{labelsep=4pt}
-	\uput[-90](7,0){$x_n=b$}
-	\psset{labelsep=3pt}
-	\uput[180](0,0.75){$y_0$}
-	\uput[180](0,1.5){$y_1$}
-	\uput[180](0,2.5){$y_2$}
-	\psset{linecolor=red,linewidth=1.5pt}
-	\psline{-o}(-0.5,0)(1,0)
-	\psline{*-*}(1,0.75)(2,1.5)
-	\psline{*-*}(2,1.5)(2.75,2.5)
-	\psline{*-*}(2.75,2.5)(3.5,2)
-	\psline[linestyle=dashed]{*-}(3.5,2)(4,2)
-	\psline[linestyle=dashed]{-*}(5.5,2.5)(6,1.75)
-	\psline{*-*}(6,1.75)(7,1)
-	\psline{o-}(7,0)(7.9,0)
-	\end{pspicture}
-\end{center}
-
-foo
-
-\begin{center}\small
-	\renewcommand{\pshlabel}[1]{\scriptsize $#1$}
-	\renewcommand{\psvlabel}[1]{\scriptsize $#1$}
-	\psset{unit=1.5cm,linecolor=black,linewidth=0.5pt,fillstyle=none}
-	\begin{pspicture}(-1,-1)(3.5,3)
-	\psaxes[labels=none,ticks=none]{->}(0,0)(-0.25,-0.25)(3.5,2.5)
-	\uput[-90](3.5,0){$x$}
-	\uput[0](0,2.5){$\tilde{f}(x)$}
-	\psline[linestyle=dashed](0,0.75)(1,0.75)
-	\psline[linestyle=dashed](0,1.5)(2.5,1.5)
-	\psset{labelsep=6pt}
-	\uput[-90](1,0){$x_0$}
-	\uput[-90](2.5,0){$x_1$}
-	\psset{labelsep=3pt}
-	\uput[180](0,0.75){$y_0$}
-	\uput[180](0,1.5){$y_1$}
-	
-	
-	\uput[180](0,2.25){$y_1+y_0$}
-	\psline[linestyle=dashed](0,2.25)(1,2.25)
-	
-	\psset{linecolor=red,linewidth=1.5pt}
-	\psline{-o}(-0.5,0)(1,0)
-	\psline{*-*}(1,0.75)(2.5,1.5)
-	\psline{o-}(2.5,0)(3.4,0)
-	
-	\psset{linecolor=blue,linewidth=0.5pt}
-	\psline(1,0)(1,2.25)
-	\psline(1,2.25)(2.5,2.25)
-	\psline(2.5,2.25)(2.5,0)
-	
-	\end{pspicture}
-\end{center}
-
-foo
-
 
 \end{document}
