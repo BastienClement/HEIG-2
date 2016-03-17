@@ -21,6 +21,13 @@ using namespace std;
 // 18014398241046527
 // 99194853094755497
 
+/**
+ * Test si un nombre est premier en le divisant par tous les
+ * nombres entre 2 et sqrtn.
+ *
+ * @param n      Le nombre à tester
+ * @param sqrtn  La valeur maximale à tester
+ */
 void single(uint64_t n,  uint64_t sqrtn) {
     for (uint64_t i = 2; i < sqrtn; i++) {
         if (n % i == 0) {
@@ -33,13 +40,31 @@ void single(uint64_t n,  uint64_t sqrtn) {
     return;
 }
 
+/**
+ * Implémentation parallèle de l'algorithme précédent.
+ * Cette classe se charge de créer les threads nécessaires au calcul
+ * et de gérer l'arrêt lorsque le résultat a été déterminé.
+ */
 class ParallelPrime {
 private:
+    /**
+     * Thread worker chargé d'effectuer une part du travail
+     */
     class PrimeThread : public QThread {
     private:
+        /**
+         * Nombre à tester, borne inférieure, borne suppérieure
+         */
         uint64_t n, lower, upper;
+
+        /**
+         * Pointeur vers l'objet ParallelPrime parent
+         */
         ParallelPrime* pp;
 
+        /**
+         * Méthode principale du thread
+         */
         void run() {
             for (uint64_t i = lower; i < upper; i++) {
                 if (n % i == 0) {
