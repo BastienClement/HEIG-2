@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <QThread>
 #include <QVector>
+#include <QTime>
+#include <QMutex>
 
 using namespace std;
 
@@ -20,6 +22,7 @@ using namespace std;
 // 70368760954879
 // 18014398241046527
 // 99194853094755497
+// 981168724994134051
 
 /**
  * Test si un nombre est premier en le divisant par tous les
@@ -68,9 +71,7 @@ private:
         void run() {
             for (uint64_t i = lower; i < upper; i++) {
                 if (n % i == 0) {
-                    pp->notAPrimeNumber();
-                    return;
-                } else if (isInterruptionRequested()) {
+                    pp->notAPrimeNumber(this);
                     return;
                 }
             }
@@ -84,6 +85,7 @@ private:
     uint64_t n, sqrtn;
     QVector<PrimeThread*> threads;
     bool isPrime;
+    QMutex mutex;
 
 public:
     ParallelPrime(uint64_t n,  uint64_t sqrtn) {
@@ -96,8 +98,8 @@ public:
         uint64_t base = 2;
         isPrime = true;
 
-        for (int t = 0; t < count; t++, base += slice) {
-            threads.append(new PrimeThread(n, base, base + slice, this));
+        for (int t = 0; t < count && base <= sqrtn; t++, base += slice) {
+            threads.append(new PrimeThread(n, base, min(sqrtn, base + slice), this));
         }
 
         for (PrimeThread* pt : threads) pt->start();
@@ -109,10 +111,14 @@ public:
         cout << (isPrime ? "Prime number!" : "NOT a prime number!") << endl;
     }
 
-    void notAPrimeNumber() {
-        isPrime = false;
-        for (PrimeThread* pt : threads) {
-            pt->requestInterruption();
+    void notAPrimeNumber(PrimeThread* child) {
+        if (mutex.tryLock()) {
+            isPrime = false;
+            for (PrimeThread* pt : threads) {
+                if (pt != child)
+                    pt->terminate();
+            }
+            mutex.unlock();
         }
     }
 };
@@ -120,8 +126,8 @@ public:
 
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        cerr << "HEU !" << endl;
+    if (argc < 3) {
+        cerr << "Not enought arguments !" << endl;
         return 1;
     }
 
@@ -132,8 +138,16 @@ int main(int argc, char *argv[]) {
     // La racine effective sera un peu plus grande que la racine réelle.
     while ((n / sqrtn) + 1 > sqrtn) sqrtn++;
 
+    QTime t;
+
+    t.start();
+    single(n,sqrtn);
+    cout << "Temps single : " << t.restart() << endl;
+
     ParallelPrime pp(n, sqrtn);
-    pp.run(8);
+    pp.run(stoi(argv[2]));
+
+    cout << "Temps threads : " << t.restart() << endl;
 
     return 0;
 }
