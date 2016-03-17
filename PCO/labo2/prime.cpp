@@ -11,6 +11,7 @@
 #include <QVector>
 #include <QTime>
 #include <QMutex>
+#include <QMutexLocker>
 
 using namespace std;
 
@@ -69,8 +70,9 @@ private:
          * Méthode principale du thread
          */
         void run() {
-            for (uint64_t i = lower; i < upper; i++) {
+            for (uint64_t i = lower; i < upper; i += 2) {
                 if (n % i == 0) {
+                    // Diviseur trouvé
                     pp->notAPrimeNumber(this);
                     return;
                 }
@@ -78,56 +80,103 @@ private:
         }
 
     public:
-        PrimeThread(uint64_t n, uint64_t l, uint64_t u, ParallelPrime* p)
-            : n(n), lower(l), upper(u), pp(p) {}
+        PrimeThread(uint64_t n, uint64_t l, uint64_t u, ParallelPrime* pp)
+            : n(n), lower(l), upper(u), pp(pp) {}
     };
 
+    /**
+     * Nombre à tester, borne maximale
+     */
     uint64_t n, sqrtn;
+
+    /**
+     * Liste des workers
+     */
     QVector<PrimeThread*> threads;
+
+    /**
+     * Résultat final
+     */
     bool isPrime;
+
+    /**
+     * Mutex utilisé pour s'assurer qu'il ne soit pas possible
+     * de tuer des threads au mauvais moment.
+     */
     QMutex mutex;
 
 public:
-    ParallelPrime(uint64_t n,  uint64_t sqrtn) {
-        this->n = n;
-        this->sqrtn = sqrtn;
-    }
+    ParallelPrime(uint64_t n,  uint64_t sqrtn) : n(n), sqrtn(sqrtn) {}
 
+    /**
+     * Recherche un diviseur du nombre n et affiche le résultat final.
+     * @param count Le nombre de threads à utiliser
+     */
     void run(int count) {
-        uint64_t slice = ((sqrtn - 2) / count) + 1;
-        uint64_t base = 2;
-        isPrime = true;
+        if (n % 2 == 0) {
+            // Optimistaion dans le cas où le nombre est pair
+            // Dans le cas contraire, on ne testera que des diviseurs impairs
+            isPrime = false;
+        } else {
+            // Plage de travail d'un worker
+            uint64_t slice = ((sqrtn - 3) / count) + 1;
 
-        for (int t = 0; t < count && base <= sqrtn; t++, base += slice) {
-            threads.append(new PrimeThread(n, base, min(sqrtn, base + slice), this));
+            // Valeur de départ d'un worker
+            uint64_t base = 3;
+
+            // On suppose le nombre premier jusqu'à avoir trouvé un diviseur
+            isPrime = true;
+
+            // Création des threads worker avec leur plage de travail respective
+            {
+                // On vérouille le mutex le temps du lancement pour pas qu'il soit possible
+                // de commencer à terminer les threads avant qu'ils soient tous lancés.
+                QMutexLocker lock(&mutex);
+
+                for (int t = 0; t < count && base <= sqrtn; t++, base += slice) {
+                    PrimeThread* pt = new PrimeThread(n, base, min(sqrtn, base + slice), this);
+                    threads.append(pt);
+                    pt->start();
+                }
+            }
+
+            // On attend que tous les threads se terminent
+            for (PrimeThread* pt : threads) pt->wait();
+
+            // Destruction des threads créés
+            for (PrimeThread* pt : threads) delete pt;
+            threads.clear();
         }
 
-        for (PrimeThread* pt : threads) pt->start();
-        for (PrimeThread* pt : threads) pt->wait();
-
-        for (PrimeThread* pt : threads) delete pt;
-
-        threads.clear();
         cout << (isPrime ? "Prime number!" : "NOT a prime number!") << endl;
     }
 
+    /**
+     * Un des workers a trouvé un diviseur de n.
+     * Le nombre n'est donc pas premier, et il est possible de tuer tous les workers.
+     *
+     * Cette méthode s'execute sur le thread d'un worker et peut potentiellement être
+     * appelée plusieurs fois simultanément.
+     *
+     * Lorsque le thread worker trouve un diviseur, il appel cette méthode avec un
+     * pointeur vers lui même, ce qui permet de ne pas le terminer de force.
+     *
+     * @param child Pointeur vers le worker qui a trouvé le diviseur
+     */
     void notAPrimeNumber(PrimeThread* child) {
-        if (mutex.tryLock()) {
-            isPrime = false;
-            for (PrimeThread* pt : threads) {
-                if (pt != child)
-                    pt->terminate();
-            }
-            mutex.unlock();
+        QMutexLocker lock(&mutex);
+        isPrime = false;
+        for (PrimeThread* pt : threads) {
+            if (pt != child)
+                pt->terminate();
         }
     }
 };
 
 
-
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        cerr << "Not enought arguments !" << endl;
+        cerr << "Not enought arguments!" << endl;
         return 1;
     }
 
