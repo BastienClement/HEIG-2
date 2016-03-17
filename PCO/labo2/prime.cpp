@@ -32,16 +32,19 @@ using namespace std;
  * @param n      Le nombre à tester
  * @param sqrtn  La valeur maximale à tester
  */
-void single(uint64_t n,  uint64_t sqrtn) {
-    for (uint64_t i = 2; i < sqrtn; i++) {
-        if (n % i == 0) {
-            cout << "NOT a prime number!" << endl;
-            return;
+void single(uint64_t n, uint64_t sqrtn) {
+    bool prime = n % 2 == 1;
+
+    if (prime) {
+        for (uint64_t i = 3; i < sqrtn; i += 2) {
+            if (n % i == 0) {
+                prime = false;
+                break;
+            }
         }
     }
 
-    cout << "Prime number!" << endl;
-    return;
+    cout << (prime ? "Prime number!" : "NOT a prime number!") << endl;
 }
 
 /**
@@ -70,6 +73,7 @@ private:
          * Méthode principale du thread
          */
         void run() {
+            Q_ASSERT(lower % 2 == 1);
             for (uint64_t i = lower; i < upper; i += 2) {
                 if (n % i == 0) {
                     // Diviseur trouvé
@@ -81,7 +85,9 @@ private:
 
     public:
         PrimeThread(uint64_t n, uint64_t l, uint64_t u, ParallelPrime* pp)
-            : n(n), lower(l), upper(u), pp(pp) {}
+            : n(n), upper(u), pp(pp) {
+            lower = (l % 2 == 0) ? l + 1 : l;
+        }
     };
 
     /**
