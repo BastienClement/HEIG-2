@@ -74,7 +74,7 @@ private:
          */
         void run() {
             Q_ASSERT(lower % 2 == 1);
-            for (uint64_t i = lower; i < upper; i += 2) {
+            for (uint64_t i = lower; i < upper && pp->isSupposedPrime(); i += 2) {
                 if (n % i == 0) {
                     // Diviseur trouvé
                     pp->notAPrimeNumber(this);
@@ -102,16 +102,12 @@ private:
 
     /**
      * Résultat final
+     * En cours de calcul: est-ce que le nombre est supposé premier ?
      */
     bool isPrime;
 
-    /**
-     * Mutex utilisé pour s'assurer qu'il ne soit pas possible
-     * de tuer des threads au mauvais moment.
-     */
-    QMutex mutex;
-
 public:
+
     ParallelPrime(uint64_t n,  uint64_t sqrtn) : n(n), sqrtn(sqrtn) {}
 
     /**
@@ -134,16 +130,10 @@ public:
             isPrime = true;
 
             // Création des threads worker avec leur plage de travail respective
-            {
-                // On vérouille le mutex le temps du lancement pour pas qu'il soit possible
-                // de commencer à terminer les threads avant qu'ils soient tous lancés.
-                QMutexLocker lock(&mutex);
-
-                for (int t = 0; t < count && base <= sqrtn; t++, base += slice) {
-                    PrimeThread* pt = new PrimeThread(n, base, min(sqrtn, base + slice), this);
-                    threads.append(pt);
-                    pt->start();
-                }
+            for (int t = 0; t < count && base <= sqrtn; t++, base += slice) {
+                PrimeThread* pt = new PrimeThread(n, base, min(sqrtn, base + slice), this);
+                threads.append(pt);
+                pt->start();
             }
 
             // On attend que tous les threads se terminent
@@ -159,23 +149,17 @@ public:
 
     /**
      * Un des workers a trouvé un diviseur de n.
-     * Le nombre n'est donc pas premier, et il est possible de tuer tous les workers.
-     *
-     * Cette méthode s'execute sur le thread d'un worker et peut potentiellement être
-     * appelée plusieurs fois simultanément.
-     *
-     * Lorsque le thread worker trouve un diviseur, il appel cette méthode avec un
-     * pointeur vers lui même, ce qui permet de ne pas le terminer de force.
-     *
-     * @param child Pointeur vers le worker qui a trouvé le diviseur
+     * Le nombre n'est certainement pas premier
      */
-    void notAPrimeNumber(PrimeThread* child) {
-        QMutexLocker lock(&mutex);
+    inline void notAPrimeNumber(PrimeThread* child) {
         isPrime = false;
-        for (PrimeThread* pt : threads) {
-            if (pt != child)
-                pt->terminate();
-        }
+    }
+
+    /**
+     * Retourne si le nombre est supposé premier
+     */
+    inline bool isSupposedPrime() const {
+        return isPrime;
     }
 };
 
@@ -197,12 +181,11 @@ int main(int argc, char *argv[]) {
 
     t.start();
     single(n,sqrtn);
-    cout << "Temps single : " << t.restart() << endl;
+    cout << "Temps single: " << t.restart() << endl;
 
     ParallelPrime pp(n, sqrtn);
     pp.run(stoi(argv[2]));
-
-    cout << "Temps threads : " << t.restart() << endl;
+    cout << "Temps multi: " << t.restart() << endl;
 
     return 0;
 }
