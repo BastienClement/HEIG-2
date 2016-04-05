@@ -8,11 +8,16 @@
 #ifndef BMMANAGER_H_
 #define BMMANAGER_H_
 
+#include <QObject>
 
-class BmManager
+
+class BmManager : public QObject
 {
+    Q_OBJECT
 
 public:
+    //BmManager(QObject *parent=0);
+
     /**
     * \brief Cette fonction est appelée une seule fois, au lancement de
     *        l'application.
@@ -34,6 +39,11 @@ public:
     * \brief Cette fonction est appelée lorsque le bouton stop est enfoncé.
     */
     void boutonStop();
+
+    void startBarrel();
+
+public slots:
+    void AbortGame();
 };
 
 #endif /*BMMANAGER_H_*/
