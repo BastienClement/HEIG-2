@@ -12,7 +12,10 @@
 #include <time.h>
 
 // En microsecondes
-#define DelaiLocal  4000000
+#define DelaiLocal 4000000
+
+// Nombre de rouleau utilisé par la machine
+#define NB_BARREL 3
 
 class RouleauThread : public QThread
 {
@@ -39,7 +42,7 @@ public:
 int RouleauThread::compteur = 0;
 bool isRunning = false;
 
-RouleauThread myThreads[3];
+RouleauThread myThreads[NB_BARREL];
 QTimer timer;
 
 int nextThreadToStop = 0;
@@ -48,7 +51,7 @@ size_t jackpot = 0;
 void BmManager::start()
 {
     srand(time(NULL));
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < NB_BARREL; i++) {
         int randomVal = rand() % 10;
         setValeurRouleau(i, randomVal);
         myThreads[i].setValue(randomVal);
@@ -62,7 +65,7 @@ void BmManager::start()
 
 void BmManager::end()
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NB_BARREL; i++)
         myThreads[i].terminate();
 }
 
@@ -74,17 +77,20 @@ void BmManager::pieceIntroduite()
         startBarrel();
         setMessage("Partie lancée");
         timer.start(DelaiLocal);
+        for(int i = 0; i < NB_BARREL; i++) {
+            myThreads[i].setValue(rand() % 10);
+        }
     }
 }
 
 void BmManager::boutonStop()
 {
     if(isRunning) {
-        if(nextThreadToStop < 3) {
+        if(nextThreadToStop < NB_BARREL) {
             myThreads[nextThreadToStop++].terminate();
             timer.start(DelaiLocal);
         }
-        if(nextThreadToStop == 3) {
+        if(nextThreadToStop == NB_BARREL) {
             if (myThreads[0].getValue() == myThreads[1].getValue() && myThreads[1].getValue() == myThreads[2].getValue()) {
                 int gain = round((double)jackpot / 2);
                 jackpot -= gain;
@@ -108,16 +114,14 @@ void BmManager::boutonStop()
 }
 
 void BmManager::startBarrel() {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NB_BARREL; i++)
         myThreads[i].start();
 }
 
 void BmManager::AbortGame() {
-    for(; nextThreadToStop < 3; nextThreadToStop++)
-        myThreads[nextThreadToStop].terminate();
     timer.stop();
-    setMessage("Fin de partie. Il faut jouer plus rapidement.");
-    nextThreadToStop = 0;
-    isRunning = false;
+    for(; nextThreadToStop < NB_BARREL; nextThreadToStop++)
+        myThreads[nextThreadToStop].terminate();
+    boutonStop();
 }
 
