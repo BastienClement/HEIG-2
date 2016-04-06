@@ -87,30 +87,35 @@ const char* String::c_str() const {
 }
 
 char& String::at(size_t pos) throw(std::runtime_error){
-   if(pos >= _size)
+   if(pos >= _size || pos < 0)
       throw std::runtime_error("Out of range.");
    return _str[pos];
 }
 
 const char& String::at(size_t pos) const throw(std::runtime_error){
-   if(pos >= _size)
+   if(pos >= _size || pos < 0)
       throw std::runtime_error("Out of range.");
    return _str[pos];
 }
 
-bool String::operator==(const char* charArray) {
+bool String::isEqual(const char* charArray) const {
    return !strcmp(_str, charArray);
 }
-
-bool String::operator==(const String& s) {
+bool String::isEqual(const String& s) const {
    return !strcmp(_str, s._str);
 }
-
-const String& String::operator*() const {
-   return *this;
+String& String::assign(const char* charArray) {
+   if(_size != strlen(charArray)) {
+      _size = strlen(charArray);
+      delete[] _str;
+      _str = new char[_size];
+   }
+   
+   strcpy(_str, charArray);
+   return *this;  
 }
 
-String& String::operator=(const String& s) {
+String& String::assign(const String& s) {
    if(_size != s._size) {
       _size = s._size;
       delete[] _str;
@@ -118,18 +123,25 @@ String& String::operator=(const String& s) {
    }
    
    strcpy(_str, s._str);
+   return *this;
 }
 
-String& String::operator+(const String& s) {
-   char temp[_size+s._size];
+String& String::append(const char* charArray) {
+   char* temp = new char[_size+strlen(charArray)+1];
    strcpy(temp, _str);
-   strcpy(temp+_size, s._str);
+   strcpy(temp+_size, charArray);
    
-   return *(new String(temp));
+   delete[] _str;
+   _str = temp;
+   _size += strlen(charArray);  
+   
+   _str[_size] = '\0';
+   
+   return *this;
 }
 
-String& String::operator+=(const String& s) {
-   char* temp = new char[_size+s._size];
+String& String::append(const String& s) {
+   char* temp = new char[_size+s._size+1];
    strcpy(temp, _str);
    strcpy(temp+_size, s._str);
    
@@ -137,7 +149,31 @@ String& String::operator+=(const String& s) {
    _str = temp;
    _size += s._size;
    
+   _str[_size] = '\0';
+   
    return *this;
+}
+
+bool String::operator==(const char* charArray) const{
+   return isEqual(charArray);
+}
+
+bool String::operator==(const String& s) const{
+   return isEqual(s);
+}
+
+String& String::operator=(const String& s) {
+   return assign(s);   
+}
+
+String String::operator+(const String& s) const{
+   String newString(*this);
+   newString.append(s);
+   return newString;
+}
+
+String& String::operator+=(const String& s) {
+   return append(s);   
 }
 
 String& String::between(int start, int end) const throw(std::runtime_error){
