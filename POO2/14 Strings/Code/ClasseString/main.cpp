@@ -23,11 +23,11 @@ int main() {
 	String sCharEtoile("Bonjour");
 	String sString(sCharEtoile);
 	String sChar('A');
-	String sInt(123456);
+	String sInt(-123456);
 	String sDouble(3.14);
 	String sBool(true);
 
-	String* sArray[] = {&sVide, &sCharEtoile, &sString, &sChar, &sInt, &sBool};
+	String* sArray[] = {&sVide, &sCharEtoile, &sString, &sChar, &sInt, &sDouble, &sBool};
 
 	cout << "Affichage du contenu et de la taille des differents String cree" << endl;
 	for (int i = 0; i < 6; i++) {

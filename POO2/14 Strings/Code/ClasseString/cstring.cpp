@@ -10,32 +10,6 @@
 #include <math.h>
 #include <algorithm>
 
-char* String::to_charArray(const int number) {
-	if (number == 0)
-		return "0\0";
-
-	bool isNegative = number < 0;
-	int tempNumber = number;
-
-	if (isNegative)
-		tempNumber *= -1;
-
-	int length = log10(tempNumber) + 1 + isNegative;
-
-	char* strg = new char[length + 1];
-
-	for (int i = 0; tempNumber != 0; i++, tempNumber /= 10) {
-		strg[length - 1 - i] = ('0' + (tempNumber % 10));
-	}
-
-	strg[length] = '\0';
-
-	if (isNegative)
-		strg[0] = '-';
-
-	return strg;
-}
-
 String::String() {
 	_size = 0;
 	_str = new char[1];
@@ -62,8 +36,12 @@ String::String(const char c) {
 }
 
 String::String(const int i) {
-	_str = to_charArray(i);
-	_size = strlen(_str);
+	char buffer[15];
+	itoa(i, buffer, 10);
+
+	_size = strlen(buffer);
+	_str = new char[_size + 1];
+	strcpy(_str, buffer);
 }
 
 String::String(const double d) {

@@ -44,8 +44,6 @@ public:
 
 	String slice(size_t start, size_t end) const throw(std::runtime_error);
 
-	static char* to_charArray(const int);
-
 	friend std::ostream& operator<<(std::ostream&, const String&);
 
 private:
