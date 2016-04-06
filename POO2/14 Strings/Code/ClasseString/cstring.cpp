@@ -108,7 +108,7 @@ String& String::assign(const char* charArray) {
    if(_size != strlen(charArray)) {
       _size = strlen(charArray);
       delete[] _str;
-      _str = new char[_size];
+      _str = new char[_size+1];
    }
    
    strcpy(_str, charArray);
@@ -119,7 +119,7 @@ String& String::assign(const String& s) {
    if(_size != s._size) {
       _size = s._size;
       delete[] _str;
-      _str = new char[_size];
+      _str = new char[_size+1];
    }
    
    strcpy(_str, s._str);

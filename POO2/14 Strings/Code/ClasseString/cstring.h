@@ -8,7 +8,7 @@
 #ifndef CSTRING_H
 #define	CSTRING_H
 
-#include <iostream>
+#include <ostream>
 #include <stdexcept>
 
 class String {
