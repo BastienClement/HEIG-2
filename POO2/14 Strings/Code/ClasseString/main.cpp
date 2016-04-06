@@ -104,36 +104,29 @@ int main() {
 
 	cout << endl << "Sous-chaine" << endl;
 	try {
-		cout << "Sous chaîne de \"" << sCharEtoile << "\" de 2 à 10 : ";
-		cout << sCharEtoile.between(2, 10) << endl;
+		cout << "Sous chaîne de \"" << sCharEtoile << "\" de 2 à 9 : ";
+		cout << sCharEtoile.slice(2, 9) << endl;
 	} catch (runtime_error ex) {
 		cout << ex.what() << endl;
 	}
 
 	try {
 		cout << "Sous chaine de \"" << sCharEtoile << "\" de 10 à 2 : ";
-		cout << sCharEtoile.between(10, 2) << endl;
+		cout << sCharEtoile.slice(10, 2) << endl;
 	} catch (runtime_error ex) {
 		cout << ex.what() << endl;
 	}
 
 	try {
 		cout << "Sous chaine de \"" << sCharEtoile << "\" de 2 à size()+1 : ";
-		cout << sCharEtoile.between(2, sCharEtoile.size() + 1) << endl;
+		cout << sCharEtoile.slice(2, sCharEtoile.size() + 1) << endl;
 	} catch (runtime_error ex) {
 		cout << ex.what() << endl;
 	}
-
-	try {
-		cout << "Sous chaine de \"" << sCharEtoile << "\" de -1 à 10 : ";
-		cout << sCharEtoile.between(-1, 10) << endl;
-	} catch (runtime_error ex) {
-		cout << ex.what() << endl;
-	}
-
+	
 	try {
 		cout << "Sous chaine de \"" << sCharEtoile << "\" de -10 à -2 : ";
-		cout << sCharEtoile.between(-10, -2) << endl;
+		cout << sCharEtoile.slice(-10, -2) << endl;
 	} catch (runtime_error ex) {
 		cout << ex.what() << endl;
 	}

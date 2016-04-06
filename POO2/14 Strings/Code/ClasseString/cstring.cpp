@@ -83,13 +83,16 @@ String::String(const bool b) {
 	_str[_size] = '\0';
 }
 
+String::String(const String& str, size_t start, size_t len) : String(str.c_str(), start, len) {}
+
 String::String(const char* cs, size_t start, size_t len) {
 	size_t cs_len = strlen(cs);
 
 	// On s'assure que start ne soit pas plus long que la chaîne.
-	// Si c'est le cas, on utilise le constructeur sans argument à la place.
 	if (start > cs_len) {
-		String();
+		_size = 0;
+		_str = new char[1];
+		_str[0] = '\0';
 		return;
 	}
 
@@ -203,22 +206,10 @@ String& String::operator+=(const String& s) {
 	return append(s);
 }
 
-String& String::between(int start, int end) const throw(std::runtime_error) {
-	if (start > end || start < 0 || end < 0 || end >= _size)
+String String::slice(size_t start, size_t end) const throw(std::runtime_error) {
+	if (start > end || end > _size)
 		throw std::runtime_error("Invalid range.");
-
-	if (start == end)
-		return *(new String());
-
-	String* temp = new String();
-
-	delete[] temp->_str;
-
-	temp->_str = new char[end - start + 1];
-
-	strncpy(temp->_str, _str + start, end - start);
-	temp->_str[end - start] = '\0';
-	return *temp;
+	return String(*this, start, end - start);
 }
 
 std::ostream& operator<<(std::ostream& os, const String& s) {

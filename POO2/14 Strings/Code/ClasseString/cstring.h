@@ -20,35 +20,36 @@ public:
 	String(const int);
 	String(const double);
 	String(const bool);
-	String(const char*cs, size_t start, size_t len);
+	String(const char* cs, size_t start, size_t len);
+	String(const String& str, size_t start, size_t len);
 
 	~String();
 
 	const int size() const;
-	const char*c_str() const;
-	char&at(size_t) throw(std::runtime_error);
-	const char&at(size_t) const throw(std::runtime_error);
+	const char* c_str() const;
+	char& at(size_t) throw(std::runtime_error);
+	const char& at(size_t) const throw(std::runtime_error);
 	bool isEqual(const char*) const;
 	bool isEqual(const String&) const;
-	String&assign(const char*);
-	String&assign(const String&);
-	String&append(const char*);
-	String&append(const String&);
+	String& assign(const char*);
+	String& assign(const String&);
+	String& append(const char*);
+	String& append(const String&);
 
 	bool operator==(const char*) const;
 	bool operator==(const String&) const;
-	String&operator=(const String&);
+	String& operator=(const String&);
 	String operator+(const String&) const;
-	String&operator+=(const String&);
+	String& operator+=(const String&);
 
-	String&between(int, int) const throw(std::runtime_error);
+	String slice(size_t start, size_t end) const throw(std::runtime_error);
 
-	static char*to_charArray(const int);
+	static char* to_charArray(const int);
 
-	friend std::ostream&operator<<(std::ostream&, const String&);
+	friend std::ostream& operator<<(std::ostream&, const String&);
 
 private:
-	char*_str;
+	char* _str;
 	size_t _size;
 
 };
