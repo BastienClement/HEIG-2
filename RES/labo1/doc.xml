@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" ?>
+<!DOCTYPE global SYSTEM "grammaire.dtd">
+<global>
+
+	<films>
+		<film id="1" langage="FR" image="www.google.ch/image.jpg" duree="75">
+			<titre>Les dents de la mer 2</titre>
+			<synopsis> Attention à la baignade </synopsis>
+			<critiques>
+				<critique id="10" note="5"> Pas top. Le premier était mieux.</critique>
+			</critiques>
+			<genres>
+				<genre>Sci-Fi</genre>
+				<genre>Romance</genre>
+				<genre>Drame</genre>
+			</genres>
+			<motCles>
+				<motCle>Wow</motCle>
+				<motCle>SuchMotCle</motCle>
+			</motCles>
+			<liste-acteur>
+				<el-acteur id="1" role="1" nomRole="Balayeur"/>
+			</liste-acteur>
+		</film>
+	</films>
+	
+	<acteurs>
+		<acteur id="1" sexe="Inconnu">
+			<nom>Paul</nom>
+			<nomNaissance>Martin</nomNaissance>
+			<bibliographie>Née en 2000, il perçat rapidement dans le milieu dès l'age de 5 ans</bibliographie>
+			<dateNaissance>
+				<jour>20</jour>
+				<mois>12</mois>
+				<annee>2012</annee>
+			</dateNaissance>
+			<dateDeces>
+				<jour>20</jour>
+				<mois>12</mois>
+				<annee>2012</annee>			
+			</dateDeces>				
+		</acteur>
+	</acteurs>
+	
+	<projections>
+		<projection film="1" numeroSalle="2">
+			<date>
+				<jour>20</jour>
+				<mois>12</mois>
+				<annee>2012</annee>
+				<heure>20</heure>
+				<minute>12</minute>
+			</date>
+		</projection>
+	</projections>
+	
+</global>

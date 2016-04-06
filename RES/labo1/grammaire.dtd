@@ -1,0 +1,29 @@
+<!ELEMENT global (films, acteurs, projections)>
+	<!ELEMENT films (film*)>
+		<!ELEMENT film (titre, synopsis, critiques, genres, motCles, liste-acteur)>
+			<!ELEMENT titre(#PCDATA)>
+			<!ELEMENT synopsis(#PCDATA)>
+			<!ELEMENT genres (genre)*>
+				<!ELEMENT genre(#PCDATA)>
+			<!ELEMENT motCles (motCle)*>
+				<!ELEMENT motCle (#PCDATA)*>
+			<!ELEMENT liste-acteur (el-acteur)>
+				<!ELEMENT el-acteur EMPTY>
+				<!ATTLIST el-acteur id #IDREF #REQUIRED>
+				<!ATTLIST el-acteur role #REQUIRED>
+				<!ATTLIST el-acteur nomRole #REQUIRED>
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
+<!ELEMENT >
