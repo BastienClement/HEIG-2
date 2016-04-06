@@ -1,6 +1,8 @@
 /* 
  * File:   cstring.h
- * Author: Alain
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal : Déclarations des en-têtes de fonctions de la classe String.
  *
  * Created on 10. mars 2016, 11:31
  */
@@ -27,8 +29,8 @@ public:
 
 	const int size() const;
 	const char* c_str() const;
-	char& at(size_t) throw(std::runtime_error);
-	const char& at(size_t) const throw(std::runtime_error);
+	char& at(size_t) throw(const std::runtime_error&);
+	const char& at(size_t) const throw(const std::runtime_error&);
 	bool isEqual(const char*) const;
 	bool isEqual(const String&) const;
 	String& assign(const char*);
@@ -38,11 +40,14 @@ public:
 
 	bool operator==(const char*) const;
 	bool operator==(const String&) const;
+        String& operator=(const char*);
 	String& operator=(const String&);
+        String operator+(const char*) const;
 	String operator+(const String&) const;
+        String& operator+=(const char*);
 	String& operator+=(const String&);
 
-	String slice(size_t start, size_t end) const throw(std::runtime_error);
+	String slice(size_t start, size_t end) const throw(const std::runtime_error&);
 
 	friend std::ostream& operator<<(std::ostream&, const String&);
 
