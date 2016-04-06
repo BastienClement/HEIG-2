@@ -7,7 +7,6 @@
 
 #include "cstring.h"
 #include <string.h>
-#include <math.h>
 #include <algorithm>
 
 String::String() {
@@ -61,7 +60,7 @@ String::String(const bool b) {
 	_str[_size] = '\0';
 }
 
-String::String(const String& str, size_t start, size_t len) : String(str.c_str(), start, len) {}
+String::String(const String& str, size_t start, size_t len) : String(str.c_str(), start, len) { }
 
 String::String(const char* cs, size_t start, size_t len) {
 	size_t cs_len = strlen(cs);
