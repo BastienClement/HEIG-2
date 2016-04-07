@@ -1,61 +1,89 @@
 #include <QString>
 #include <QThread>
 #include <QTimer>
-
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "bmmanager.h"
 #include "banditmanchot_interface.h"
-
 
 #include <iostream>
 #include <math.h>
 #include <time.h>
 
-// En microsecondes
-#define DelaiLocal 4000000
+// En milliseconds
+#define TIMEOUT 10000
 
 // Nombre de rouleau utilisé par la machine
 #define NB_BARREL 3
 
-class RouleauThread : public QThread
+class BarrelThread : public QThread
 {
 private:
-    int rouleau;
+    static int nextId;
+
     int id;
-    static int compteur;
-    int valeur;
+    int value;
+    QMutex mutex;
+
+    void nextValue() {
+        setValue((value + 1) % 10);
+    }
+
 public:
-    RouleauThread(): id(compteur++){}
+    BarrelThread(): id(nextId++) {}
+
     void run() Q_DECL_OVERRIDE {
-        setValeurRouleau(id,valeur);
         for(;;){
             usleep(10000);
-            valeur = (valeur + 1) % 10;
-            setValeurRouleau(id,valeur);
+            nextValue();
         }
     }
 
-    int getValue() const { return valeur; }
-    void setValue(int v) { valeur = v % 10;}
+    /*
+     * Renvoie de la valeur du rouleau.
+     */
+    int getValue() {
+        QMutexLocker lock(&mutex);
+        return value;
+    }
+
+    /*
+     * Change la valeur du rouleau et l'affiche dans l'interface.
+     */
+    void setValue(int v) {
+        QMutexLocker lock(&mutex);
+        value = v % 10;
+        setValeurRouleau(id, value);
+    }
+
+    /*
+     * Attribut une valeur aléatoire comprise en 0 et 9 au rouleau.
+     */
+    void shuffle() {
+        setValue(rand() % 10);
+    }
 };
 
-int RouleauThread::compteur = 0;
+int BarrelThread::nextId = 0;
 bool isRunning = false;
 
-RouleauThread myThreads[NB_BARREL];
+BarrelThread barrels[NB_BARREL];
 QTimer timer;
 
-int nextThreadToStop = 0;
+int nextBarrelToStop = 0;
 size_t jackpot = 0;
+
+QMutex stopMutex;
 
 void BmManager::start()
 {
     //Intitialisation de rouleaeux
+	
     srand(time(NULL));
+
     for(int i = 0; i < NB_BARREL; i++) {
-        int randomVal = rand() % 10;
-        setValeurRouleau(i, randomVal);
-        myThreads[i].setValue(randomVal);
+        barrels[i].shuffle();
     }
 
     setMessage("Bienvenue, insérez une pièce pour commencer");
@@ -71,9 +99,14 @@ void BmManager::start()
 void BmManager::end()
 {
     for(int i = 0; i < NB_BARREL; i++)
-        myThreads[i].terminate();
+        barrels[i].terminate();
 }
 
+/*
+ * Fonction appelé lors de l'appui sur le bouton "Piece".
+ * Si les rouleaux sont déjà entrain de tourner, la fonction ne fait rien.
+ * Sinon, le jackpot est incrémenté et les rouleaux commencent à tourner.
+ */
 void BmManager::pieceIntroduite()
 {
     /*
@@ -84,44 +117,54 @@ void BmManager::pieceIntroduite()
     if(!isRunning) {
         setJackpot(++jackpot);
         isRunning = true;
-        startBarrel();
-        setMessage("Partie lancée");
-        timer.start(DelaiLocal);
+        startBarrels();
+        setMessage("Partie lancée.");
+
         /*
          * Attribution de nouvelle valeur aléatoire aux rouleaux afin
          * de modifier les résultats de la partie précédente.
          */
         for(int i = 0; i < NB_BARREL; i++) {
-            myThreads[i].setValue(rand() % 10);
+            barrels[i].shuffle();
         }
+		timer.start(TIMEOUT);
     }
 }
 
+/*
+ * Fonction appelé lors de l'appui sur le bouton "Stop".
+ * Si les rouleaux ne tournent pas la fonction ne fait rien.
+ * Sinon, tant que tous les rouleaux ne sont pas arrêtés, la
+ * fonction arrête un rouleau à chaque appel, jusqu'à ce qu'il soit
+ * tous à l'arrêt.
+ * Une fois que le dernier rouleau a été arrêté, la fonction contrôle si
+ * les rouleaux n
+ */
 void BmManager::boutonStop()
 {
+    QMutexLocker lock(&stopMutex);
     if(isRunning) {
         /*
          * Arrête le prochain rouleau s'il y en a toujours entrain de tourner.
          * Le délai local est réinitialisé à chaque arrêt de rouleau.
          */
-        if(nextThreadToStop < NB_BARREL) {
-            myThreads[nextThreadToStop++].terminate();
-            timer.start(DelaiLocal);
+        if(nextBarrelToStop < NB_BARREL) {
+            barrels[nextBarrelToStop++].terminate();
+            timer.start(TIMEOUT);
         }
 
         /*
          * Si tous les rouleaux ont été arrétés, alors on contrôle si il n'y a pas gain,
          * et on récompense le joueur en conséquence.
          */
-        if(nextThreadToStop == NB_BARREL) {
-            timer.stop();
-            if (myThreads[0].getValue() == myThreads[1].getValue() && myThreads[1].getValue() == myThreads[2].getValue()) {
+        if(nextBarrelToStop == NB_BARREL) {
+            if (barrels[0].getValue() == barrels[1].getValue() && barrels[1].getValue() == barrels[2].getValue()) {
                 int gain = round((double)jackpot / 2);
                 jackpot -= gain;
                 setJackpot(jackpot);
                 setMessage("Vous avez gagné " + QString::number(gain) + " !!");
             }
-            else if( myThreads[0].getValue() == myThreads[1].getValue() || myThreads[1].getValue() == myThreads[2].getValue() || myThreads[0].getValue() == myThreads[2].getValue() ) {
+            else if(barrels[0].getValue() == barrels[1].getValue() || barrels[1].getValue() == barrels[2].getValue() || barrels[0].getValue() == barrels[2].getValue() ) {
                 int gain = round((double)jackpot / 4);
                 jackpot -= gain;
                 setJackpot(jackpot);
@@ -131,25 +174,30 @@ void BmManager::boutonStop()
                 setMessage("Dommage...");
             }
 
-            nextThreadToStop = 0;
+            nextBarrelToStop = 0;
             isRunning = false;
         }
     }
 }
 
-void BmManager::startBarrel() {
+void BmManager::startBarrels() {
     for(int i = 0; i < NB_BARREL; i++)
-        myThreads[i].start();
+        barrels[i].start();
 }
 
 void BmManager::abortGame() {
-    timer.stop();
+	// Bloc pour éviter un dead lock par l'appel de boutonStop qui va
+    // également créer un QMutexLocker sur stopMutex.
+	{
+		QMutexLocker lock(&stopMutex);
+		timer.stop();
 
-    /*
-     * Arrêt de tout les rouleaux d'un seul coup.
-     */
-    for(; nextThreadToStop < NB_BARREL; nextThreadToStop++)
-        myThreads[nextThreadToStop].terminate();
+		/*
+		 * Arrêt de tout les rouleaux d'un seul coup.
+		 */
+		for(; nextBarrelToStop < NB_BARREL; nextBarrelToStop++)
+			barrels[nextBarrelToStop].terminate();
+	}
     /*
      * Même si tous les rouleaux sont déjà arrêté, la méthode boutonStop()
      * est appelé, afin de profité de la partie contrôle de victoire de la
