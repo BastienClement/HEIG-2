@@ -50,6 +50,7 @@ size_t jackpot = 0;
 
 void BmManager::start()
 {
+    //Intitialisation de rouleaeux
     srand(time(NULL));
     for(int i = 0; i < NB_BARREL; i++) {
         int randomVal = rand() % 10;
@@ -58,9 +59,13 @@ void BmManager::start()
     }
 
     setMessage("Bienvenue, insérez une pièce pour commencer");
-    timer.stop();
 
-    connect(&timer, SIGNAL(timeout()), this, SLOT(AbortGame()));
+    /*
+     * Connexion de la méthode timeout() du timer et de la méthode
+     * abortGame(), afin que lorsque le timer arrive à 0, il soit possible
+     * de stoper tout les rouleaux.
+     */
+    connect(&timer, SIGNAL(timeout()), this, SLOT(abortGame()));
 }
 
 void BmManager::end()
@@ -71,12 +76,21 @@ void BmManager::end()
 
 void BmManager::pieceIntroduite()
 {
+    /*
+     * Si la machine n'est pas encore lancé, démarre l'application avec
+     * un délai avant le quelle la machine s'arrête si l'utilisateur
+     * n'as pas appuyé sur le bouton stop.
+     */
     if(!isRunning) {
         setJackpot(++jackpot);
         isRunning = true;
         startBarrel();
         setMessage("Partie lancée");
         timer.start(DelaiLocal);
+        /*
+         * Attribution de nouvelle valeur aléatoire aux rouleaux afin
+         * de modifier les résultats de la partie précédente.
+         */
         for(int i = 0; i < NB_BARREL; i++) {
             myThreads[i].setValue(rand() % 10);
         }
@@ -86,11 +100,21 @@ void BmManager::pieceIntroduite()
 void BmManager::boutonStop()
 {
     if(isRunning) {
+        /*
+         * Arrête le prochain rouleau s'il y en a toujours entrain de tourner.
+         * Le délai local est réinitialisé à chaque arrêt de rouleau.
+         */
         if(nextThreadToStop < NB_BARREL) {
             myThreads[nextThreadToStop++].terminate();
             timer.start(DelaiLocal);
         }
+
+        /*
+         * Si tous les rouleaux ont été arrétés, alors on contrôle si il n'y a pas gain,
+         * et on récompense le joueur en conséquence.
+         */
         if(nextThreadToStop == NB_BARREL) {
+            timer.stop();
             if (myThreads[0].getValue() == myThreads[1].getValue() && myThreads[1].getValue() == myThreads[2].getValue()) {
                 int gain = round((double)jackpot / 2);
                 jackpot -= gain;
@@ -118,10 +142,19 @@ void BmManager::startBarrel() {
         myThreads[i].start();
 }
 
-void BmManager::AbortGame() {
+void BmManager::abortGame() {
     timer.stop();
+
+    /*
+     * Arrêt de tout les rouleaux d'un seul coup.
+     */
     for(; nextThreadToStop < NB_BARREL; nextThreadToStop++)
         myThreads[nextThreadToStop].terminate();
+    /*
+     * Même si tous les rouleaux sont déjà arrêté, la méthode boutonStop()
+     * est appelé, afin de profité de la partie contrôle de victoire de la
+     * méthode.
+     */
     boutonStop();
 }
 

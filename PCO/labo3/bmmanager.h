@@ -43,7 +43,7 @@ public:
     void startBarrel();
 
 public slots:
-    void AbortGame();
+    void abortGame();
 };
 
 #endif /*BMMANAGER_H_*/
