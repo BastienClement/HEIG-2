@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-
 #include "cstring.h"
 
 using namespace std;
@@ -24,7 +23,7 @@ int main() {
         String sInt(123456);
         String sDouble(3.14);
         String sBool(true);
-
+        
         String* sArray[] = {&sVide, &sCharEtoile, &sString, &sChar, &sInt, &sDouble, &sBool};
 
         cout << "Affichage du contenu et de la taille des differents String cree" << endl;

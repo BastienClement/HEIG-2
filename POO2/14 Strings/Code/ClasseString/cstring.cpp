@@ -35,7 +35,7 @@ String::String(const char* cs) {
 String::String(const String& s) {
 	_str = new char[s._size + 1];
 	_size = s._size;
-	*this = s;
+	this->assign(s);
 }
 
 /*
@@ -136,7 +136,7 @@ const char* String::c_str() const {
  * Lance une exception si la position demandé est en dehors de la portée du String.
  */
 char& String::at(size_t pos) throw(const std::runtime_error&) {
-	if (pos >= _size || pos < 0)
+	if (pos >= _size)
 		throw std::runtime_error("Out of range.");
 	return _str[pos];
 }
@@ -146,7 +146,7 @@ char& String::at(size_t pos) throw(const std::runtime_error&) {
  * Lance une exception si la position demandé est en dehors de la portée du String.
  */
 const char& String::at(size_t pos) const throw(const std::runtime_error&) {
-	if (pos >= _size || pos < 0)
+	if (pos >= _size)
 		throw std::runtime_error("Out of range.");
 	return _str[pos];
 }
