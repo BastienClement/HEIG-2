@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE films SYSTEM "XML.dtd">
+<!DOCTYPE data SYSTEM "XML.dtd">
 <data>
 	<films>
 		<film>
@@ -30,23 +30,13 @@
 			</languesFilm>
 
 			<roles>
-				<role place="1" acteur="acteur-1">
-					<nomRole>Bruce Wayne / Batman</nomRole>
-				</role>
-				<role place="2" acteur="acteur-2">
-					<nomRole>Clark Kent / Superman</nomRole>
-				</role>
+				<role acteur="acteur-1" nom="Bruce Wayne / Batman" />
+				<role acteur="acteur-2" nom="Clark Kent / Superman" />
 			</roles>
 
 			<projections>
-				<projection>
-					<date>2016-04-07</date>
-					<salleProjection ref="salle-1" />
-				</projection>
-				<projection>
-					<date>2016-04-08</date>
-					<salleProjection ref="salle-2" />
-				</projection>
+				<projection date="2016-04-07" salle="salle-1" />
+				<projection date="2016-04-08" salle="salle-2" />
 			</projections>
 
 			<critiques>
@@ -84,27 +74,14 @@
 			</languesFilm>
 
 			<roles>
-				<role place="1" acteur="acteur-3">
-					<nomRole>Judy Hopps (voice)</nomRole>
-				</role>
-				<role place="2" acteur="acteur-4">
-					<nomRole>Nick Wilde (voice)</nomRole>
-				</role>
+				<role acteur="acteur-3" nom="Judy Hopps (voice)" />
+				<role acteur="acteur-4" nom="Nick Wilde (voice)" />
 			</roles>
 
 			<projections>
-				<projection>
-					<date>2016-04-07</date>
-					<salleProjection ref="salle-1" />
-				</projection>
-				<projection>
-					<date>2016-04-08</date>
-					<salleProjection ref="salle-2" />
-				</projection>
-				<projection>
-					<date>2016-04-09</date>
-					<salleProjection ref="salle-1" />
-				</projection>
+				<projection date="2016-04-07" salle="salle-1" />
+				<projection date="2016-04-08" salle="salle-2" />
+				<projection date="2016-04-09" salle="salle-1" />
 			</projections>
 
 			<critiques>
@@ -161,8 +138,8 @@
 
 	<langues>
 		<langue lang="fr">Français</langue>
-		<langue lang="en">Anglais</langue>
-		<langue lang="de">Allemand</langue>
+		<langue lang="en">English</langue>
+		<langue lang="de">Deutsch</langue>
 	</langues>
 
 	<salles>

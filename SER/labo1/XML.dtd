@@ -19,30 +19,28 @@
 					<!ATTLIST langueFilm lang IDREF #REQUIRED>
 					
 			<!ELEMENT roles (role+)>
-				<!ELEMENT role (nomRole)>
-					<!ATTLIST role place CDATA #IMPLIED>
+				<!ELEMENT role EMPTY>
 					<!ATTLIST role acteur IDREF #REQUIRED>
-					<!ELEMENT nomRole (#PCDATA)>
+					<!ATTLIST role nom CDATA #REQUIRED>
 
 			<!ELEMENT projections (projection+)>
-				<!ELEMENT projection (date, salleProjection)>
-					<!ELEMENT date (#PCDATA)>
-					<!ELEMENT salleProjection EMPTY>
-						<!ATTLIST salleProjection ref IDREF #REQUIRED>
+				<!ELEMENT projection EMPTY>
+					<!ATTLIST projection date CDATA #REQUIRED>
+					<!ATTLIST projection salle IDREF #REQUIRED>
 
 			<!ELEMENT critiques (critique+)>
 				<!ELEMENT critique (#PCDATA)>
 					<!ATTLIST critique note CDATA #REQUIRED>
 
 	<!ELEMENT acteurs (acteur+)>
-		<!ELEMENT acteur (nomActeur, nomNaissance, biographie, sexe, dateNaissance, dateMort?)>
+		<!ELEMENT acteur (nomActeur, nomNaissance, biographie, sexe, dateNaissance, dateDeces?)>
 			<!ATTLIST acteur id ID #REQUIRED>
 			<!ELEMENT nomActeur (#PCDATA)>
 			<!ELEMENT nomNaissance (#PCDATA)>
 			<!ELEMENT biographie (#PCDATA)>
 			<!ELEMENT sexe (#PCDATA)>
 			<!ELEMENT dateNaissance (#PCDATA)>
-			<!ELEMENT dateMort (#PCDATA)>
+			<!ELEMENT dateDeces (#PCDATA)>
 
 	<!ELEMENT genres (genre+)>
 		<!ELEMENT genre (#PCDATA)>
