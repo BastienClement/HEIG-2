@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE films SYSTEM "XML.dtd">
+<data>
+	<films>
+		<film>
+			<nomFilm>Batman v Superman: Dawn of Justice</nomFilm>
+			<synopsis><![CDATA[Following his titanic struggle against General Zod, Metropolis has been razed to the ground and Superman is the most controversial figure in the world. While for many he is still an emblem of hope, a growing number of people consider him a threat to humanity, seeking justice for the chaos he has brought to Earth. As far as Bruce Wayne is concerned, Superman is clearly a danger to society. He fears for the future of the world with such a reckless power left ungoverned, and so he dons his mask and cape to right Superman's wrongs. The rivalry between them is furious, fueled by bitterness and vengeance, and nothing can dissuade them from waging this war. However, a dark new threat arises in the form of a third man: one who has a power greater than either of them to endanger the world and cause total destruction!]]></synopsis>
+			<duree>151</duree>
+			<image src="rm3547601664.jpg" />
+			
+			<genresFilm>
+				<genreFilm ref="genre-1"/>
+				<genreFilm ref="genre-2"/>
+				<genreFilm ref="genre-3"/>
+				<genreFilm ref="genre-4"/>
+			</genresFilm>
+			
+			<motsCles>
+				<motCle>based on comic book</motCle>
+				<motCle>sequel</motCle>
+				<motCle>superman</motCle>
+				<motCle>batman</motCle>
+				<motCle>wonder woman</motCle>
+			</motsCles>
+			
+			<languesFilm>
+				<langueFilm lang="fr" />
+				<langueFilm lang="en" />
+				<langueFilm lang="de" />
+			</languesFilm>
+
+			<roles>
+				<role place="1" acteur="acteur-1">
+					<nomRole>Bruce Wayne / Batman</nomRole>
+				</role>
+				<role place="2" acteur="acteur-2">
+					<nomRole>Clark Kent / Superman</nomRole>
+				</role>
+			</roles>
+
+			<projections>
+				<projection>
+					<date>2016-04-07</date>
+					<salleProjection ref="salle-1" />
+				</projection>
+				<projection>
+					<date>2016-04-08</date>
+					<salleProjection ref="salle-2" />
+				</projection>
+			</projections>
+
+			<critiques>
+				<critique note="20"><![CDATA[Once a movie that i was extremely nervous about stepping into, just happened to turn out to be...]]></critique>
+				<critique note="12"><![CDATA[Definitely a step-up from Man of Steel. First of all, I was a bit skeptical about this movie...]]></critique>
+			</critiques>
+		</film>
+		
+		<film>
+			<nomFilm>Zootopia</nomFilm>
+			<synopsis><![CDATA[From the largest elephant to the smallest shrew, the city of Zootopia is a mammal metropolis where various animals live and thrive. When Judy Hopps...]]></synopsis>
+			<duree>108</duree>
+			<image src="rm3116491008.jpg" />
+			
+			<genresFilm>
+				<genreFilm ref="genre-5"/>
+				<genreFilm ref="genre-2"/>
+				<genreFilm ref="genre-6"/>
+				<genreFilm ref="genre-7"/>
+				<genreFilm ref="genre-8"/>
+			</genresFilm>
+			
+			<motsCles>
+				<motCle>anthropomorphic animal</motCle>
+				<motCle>fox</motCle>
+				<motCle>con artist</motCle>
+				<motCle>mammal</motCle>
+				<motCle>police</motCle>
+			</motsCles>
+			
+			<languesFilm>
+				<langueFilm lang="fr" />
+				<langueFilm lang="en" />
+				<langueFilm lang="de" />
+			</languesFilm>
+
+			<roles>
+				<role place="1" acteur="acteur-3">
+					<nomRole>Judy Hopps (voice)</nomRole>
+				</role>
+				<role place="2" acteur="acteur-4">
+					<nomRole>Nick Wilde (voice)</nomRole>
+				</role>
+			</roles>
+
+			<projections>
+				<projection>
+					<date>2016-04-07</date>
+					<salleProjection ref="salle-1" />
+				</projection>
+				<projection>
+					<date>2016-04-08</date>
+					<salleProjection ref="salle-2" />
+				</projection>
+				<projection>
+					<date>2016-04-09</date>
+					<salleProjection ref="salle-1" />
+				</projection>
+			</projections>
+
+			<critiques>
+				<critique note="17"><![CDATA[Zootropolis is directed by Byron Howard, Rich Moore & Jared Bush and stars the voice talents of Ginnifer Goodwin, Jason Bateman, Idris Elba, Nate Torrence and man...]]></critique>
+				<critique note="20"><![CDATA[Zootopia is best of the best for the spectacular cinematography,impressive story,enchanting music and stunning acting.]]></critique>
+			</critiques>
+		</film>
+	</films>
+
+	<acteurs>
+		<acteur id="acteur-1">
+			<nomActeur>Ben Affleck</nomActeur>
+			<nomNaissance>Benjamin Geza Affleck-Boldt</nomNaissance>
+			<biographie><![CDATA[Benjamin Géza Affleck-Boldt was born on August 15, 1972 in Berkeley, California, and was raised in Cambridge, ...]]></biographie>
+			<sexe>Male</sexe>
+			<dateNaissance>1972-08-15</dateNaissance>
+		</acteur>
+		
+		<acteur id="acteur-2">
+			<nomActeur>Henry Cavill</nomActeur>
+			<nomNaissance>Henry William Dalgliesh Cavill</nomNaissance>
+			<biographie><![CDATA[Henry William Dalgliesh Cavill is a British actor. He was born on the Bailiwick of Jersey, a British Crown dependency...]]></biographie>
+			<sexe>Male</sexe>
+			<dateNaissance>1983-05-05</dateNaissance>
+		</acteur>
+		
+		<acteur id="acteur-3">
+			<nomActeur>Ginnifer Goodwin</nomActeur>
+			<nomNaissance>Ginnifer Michelle Goodwin</nomNaissance>
+			<biographie><![CDATA[Ginnifer Michelle Goodwin was born on 22nd May 1978, in Memphis, Tennessee, to Linda (Kantor), who worked at FedEx and Apple, and Tim Goodwin...]]></biographie>
+			<sexe>Female</sexe>
+			<dateNaissance>1978-05-22</dateNaissance>
+		</acteur>
+		
+		<acteur id="acteur-4">
+			<nomActeur>Jason Bateman</nomActeur>
+			<nomNaissance>Jason Bateman</nomNaissance>
+			<biographie><![CDATA[Jason Bateman is an American film and television actor best known for his role as Michael Bluth on the tele...]]></biographie>
+			<sexe>Male</sexe>
+			<dateNaissance>1969-01-14</dateNaissance>
+		</acteur>
+	</acteurs>
+
+	<genres>
+		<genre id="genre-1">Action</genre>
+		<genre id="genre-2">Adventure</genre>
+		<genre id="genre-3">Fantasy</genre>
+		<genre id="genre-4">Sci-Fi</genre>
+		<genre id="genre-5">Animation</genre>
+		<genre id="genre-6">Comedy</genre>
+		<genre id="genre-7">Crime</genre>
+		<genre id="genre-8">Family-Fi</genre>
+	</genres>
+
+	<langues>
+		<langue lang="fr">Français</langue>
+		<langue lang="en">Anglais</langue>
+		<langue lang="de">Allemand</langue>
+	</langues>
+
+	<salles>
+		<salle id="salle-1">
+			<no>1</no>
+			<taille>150</taille>
+		</salle>
+		
+		<salle id="salle-2">
+			<no>2</no>
+			<taille>130</taille>
+		</salle>
+	</salles>
+</data>
