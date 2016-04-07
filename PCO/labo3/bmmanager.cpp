@@ -1,60 +1,78 @@
 #include <QString>
 #include <QThread>
 #include <QTimer>
-
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "bmmanager.h"
 #include "banditmanchot_interface.h"
-
 
 #include <iostream>
 #include <math.h>
 #include <time.h>
 
-// En microsecondes
-#define DelaiLocal 4000000
+// En milliseconds
+#define TIMEOUT 10000
 
 // Nombre de rouleau utilisé par la machine
 #define NB_BARREL 3
 
-class RouleauThread : public QThread
+class BarrelThread : public QThread
 {
 private:
-    int rouleau;
+    static int nextId;
+
     int id;
-    static int compteur;
-    int valeur;
+    int value;
+    QMutex mutex;
+
+    void nextValue() {
+        setValue((value + 1) % 10);
+    }
+
 public:
-    RouleauThread(): id(compteur++){}
+    BarrelThread(): id(nextId++) {}
+
     void run() Q_DECL_OVERRIDE {
-        setValeurRouleau(id,valeur);
         for(;;){
             usleep(10000);
-            valeur = (valeur + 1) % 10;
-            setValeurRouleau(id,valeur);
+            nextValue();
         }
     }
 
-    int getValue() const { return valeur; }
-    void setValue(int v) { valeur = v % 10;}
+    int getValue() {
+        QMutexLocker lock(&mutex);
+        return value;
+    }
+
+    void setValue(int v) {
+        QMutexLocker lock(&mutex);
+        value = v % 10;
+        setValeurRouleau(id, value);
+    }
+
+    void shuffle() {
+        setValue(rand() % 10);
+    }
 };
 
-int RouleauThread::compteur = 0;
+int BarrelThread::nextId = 0;
 bool isRunning = false;
 
-RouleauThread myThreads[NB_BARREL];
+BarrelThread barrels[NB_BARREL];
 QTimer timer;
 
-int nextThreadToStop = 0;
+int nextBarrelToStop = 0;
 size_t jackpot = 0;
+
+QMutex stopMutex;
 
 void BmManager::start()
 {
     srand(time(NULL));
+
     for(int i = 0; i < NB_BARREL; i++) {
-        int randomVal = rand() % 10;
-        setValeurRouleau(i, randomVal);
-        myThreads[i].setValue(randomVal);
+        barrels[i].shuffle();
     }
 
     setMessage("Bienvenue, insérez une pièce pour commencer");
@@ -66,7 +84,7 @@ void BmManager::start()
 void BmManager::end()
 {
     for(int i = 0; i < NB_BARREL; i++)
-        myThreads[i].terminate();
+        barrels[i].terminate();
 }
 
 void BmManager::pieceIntroduite()
@@ -74,30 +92,31 @@ void BmManager::pieceIntroduite()
     if(!isRunning) {
         setJackpot(++jackpot);
         isRunning = true;
-        startBarrel();
+        startBarrels();
         setMessage("Partie lancée");
-        timer.start(DelaiLocal);
+        timer.start(TIMEOUT);
         for(int i = 0; i < NB_BARREL; i++) {
-            myThreads[i].setValue(rand() % 10);
+            barrels[i].shuffle();
         }
     }
 }
 
 void BmManager::boutonStop()
 {
+    QMutexLocker lock(&stopMutex);
     if(isRunning) {
-        if(nextThreadToStop < NB_BARREL) {
-            myThreads[nextThreadToStop++].terminate();
-            timer.start(DelaiLocal);
+        if(nextBarrelToStop < NB_BARREL) {
+            barrels[nextBarrelToStop++].terminate();
+            timer.start(TIMEOUT);
         }
-        if(nextThreadToStop == NB_BARREL) {
-            if (myThreads[0].getValue() == myThreads[1].getValue() && myThreads[1].getValue() == myThreads[2].getValue()) {
+        if(nextBarrelToStop == NB_BARREL) {
+            if (barrels[0].getValue() == barrels[1].getValue() && barrels[1].getValue() == barrels[2].getValue()) {
                 int gain = round((double)jackpot / 2);
                 jackpot -= gain;
                 setJackpot(jackpot);
                 setMessage("Vous avez gagné " + QString::number(gain) + " !!");
             }
-            else if( myThreads[0].getValue() == myThreads[1].getValue() || myThreads[1].getValue() == myThreads[2].getValue() || myThreads[0].getValue() == myThreads[2].getValue() ) {
+            else if(barrels[0].getValue() == barrels[1].getValue() || barrels[1].getValue() == barrels[2].getValue() || barrels[0].getValue() == barrels[2].getValue() ) {
                 int gain = round((double)jackpot / 4);
                 jackpot -= gain;
                 setJackpot(jackpot);
@@ -107,21 +126,26 @@ void BmManager::boutonStop()
                 setMessage("Dommage...");
             }
 
-            nextThreadToStop = 0;
+            nextBarrelToStop = 0;
             isRunning = false;
         }
     }
 }
 
-void BmManager::startBarrel() {
+void BmManager::startBarrels() {
     for(int i = 0; i < NB_BARREL; i++)
-        myThreads[i].start();
+        barrels[i].start();
 }
 
 void BmManager::AbortGame() {
-    timer.stop();
-    for(; nextThreadToStop < NB_BARREL; nextThreadToStop++)
-        myThreads[nextThreadToStop].terminate();
+    // Bloc pour éviter un dead lock par l'appel de boutonStop qui va
+    // également créer un QMutexLocker sur stopMutex.
+    {
+        QMutexLocker lock(&stopMutex);
+        timer.stop();
+        for(; nextBarrelToStop < NB_BARREL; nextBarrelToStop++)
+            barrels[nextBarrelToStop].terminate();
+    }
     boutonStop();
 }
 

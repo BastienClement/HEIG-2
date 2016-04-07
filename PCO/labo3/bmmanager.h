@@ -40,7 +40,7 @@ public:
     */
     void boutonStop();
 
-    void startBarrel();
+    void startBarrels();
 
 public slots:
     void AbortGame();
