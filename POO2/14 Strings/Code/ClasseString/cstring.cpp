@@ -53,7 +53,7 @@ String::String(const char c) {
  */
 String::String(const int i) {
 	char buffer[15];
-        snprintf(buffer, sizeof(buffer), "%d", i);
+	snprintf(buffer, sizeof(buffer), "%d", i);
 
 	_size = strlen(buffer);
 	_str = new char[_size + 1];
@@ -103,9 +103,9 @@ String::String(const char* cs, size_t start, size_t len) {
 		_str[0] = '\0';
 		return;
 	}
-        
-        // Assure d'avoir une chaîne cohérente, dans le cas où une taille plus grande
-        // que le nombre de caractères disponible est demandée.
+
+	// Assure d'avoir une chaîne cohérente, dans le cas où une taille plus grande
+	// que le nombre de caractères disponible est demandée.
 	_size = std::min(cs_len - start, len);
 	_str = new char[_size + 1];
 	strncpy(_str, cs + start, _size);
@@ -171,21 +171,21 @@ bool String::isEqual(const String& s) const {
  * Affecte une chaîne de caractères au String.
  */
 String& String::assign(const char* charArray) {
-         if(_size != strlen(charArray)) {
-            _size = strlen(charArray);
-            delete[] _str;
-            _str = new char[_size+1];
-         }
+	if (_size != strlen(charArray)) {
+		_size = strlen(charArray);
+		delete[] _str;
+		_str = new char[_size + 1];
+	}
 
-         strcpy(_str, charArray);
-         return *this;  
+	strcpy(_str, charArray);
+	return *this;
 }
 
 /*
  * Affecte le contenu d'un String à l'instance d'un String.
  */
 String& String::assign(const String& s) {
-         return assign(s._str);
+	return assign(s._str);
 }
 
 /*
@@ -208,7 +208,7 @@ String& String::append(const char* charArray) {
 /*
  * Concatène le String à une autre instance de String.
  */
-String& String::append(const String& s) {        
+String& String::append(const String& s) {
 	return append(s._str);;
 }
 
@@ -277,7 +277,7 @@ String& String::operator+=(const String& s) {
 String String::slice(size_t start, size_t end) const throw(const std::runtime_error&) {
 	if (start > end || end > _size)
 		throw std::runtime_error("Invalid range.");
-	return String(*this, start, end - start);
+	return String(_str, start, end - start);
 }
 
 /*

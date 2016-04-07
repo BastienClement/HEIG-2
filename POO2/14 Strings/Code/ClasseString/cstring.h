@@ -8,7 +8,7 @@
  */
 
 #ifndef CSTRING_H
-#define    CSTRING_H
+#define CSTRING_H
 
 #include <ostream>
 #include <stdexcept>
@@ -40,11 +40,11 @@ public:
 
 	bool operator==(const char*) const;
 	bool operator==(const String&) const;
-        String& operator=(const char*);
+	String& operator=(const char*);
 	String& operator=(const String&);
-        String operator+(const char*) const;
+	String operator+(const char*) const;
 	String operator+(const String&) const;
-        String& operator+=(const char*);
+	String& operator+=(const char*);
 	String& operator+=(const String&);
 
 	String slice(size_t start, size_t end) const throw(const std::runtime_error&);
