@@ -1,6 +1,13 @@
 import java.awt.*;
 
+/**
+ * Implémentations de Renderable.
+ * Défini deux implémentations dessinant les formes avec bordures ou remplies.
+ */
 public abstract class Renderer implements Renderable {
+	/**
+	 * Dessine les formes avec bordures
+	 */
 	public static class Bordered extends Renderer {
 		@Override
 		public void display(Graphics2D g, Bouncable b) {
@@ -10,6 +17,9 @@ public abstract class Renderer implements Renderable {
 		}
 	}
 
+	/**
+	 * Dessine des formes remplies
+	 */
 	public static class Filled extends Renderer {
 		@Override
 		public void display(Graphics2D g, Bouncable b) {

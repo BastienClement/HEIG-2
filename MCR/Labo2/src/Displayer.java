@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 
+/**
+ * Interface de la fenêtre de l'application
+ */
 public interface Displayer {
 	int getWidth();
 	int getHeight();
