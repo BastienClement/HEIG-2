@@ -106,6 +106,7 @@ public:
       Element* data;
    };
    
+   
    List(): head(nullptr), tail(nullptr), _size(0) {};
    
    List(const List& orig): List() {
@@ -195,7 +196,7 @@ public:
     * Supprime un élément par rapport à sa position dans liste.
     */
    void remove(int index) throw(const std::runtime_error&){
-      if(index >= _size || size < 0) {
+      if(index >= _size || _size < 0) {
          throw std::runtime_error("Out of range.");
       }
 
@@ -218,7 +219,7 @@ public:
          current->next->previous = current->previous;
       }
 
-      size--;
+      _size--;
    }
    
    /*
@@ -248,7 +249,7 @@ public:
             current->next->previous = current->previous;
          }
 
-         size--;
+         _size--;
       }
    }
    

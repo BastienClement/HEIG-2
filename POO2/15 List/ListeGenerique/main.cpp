@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include "List.h"
+#include <stdexcept>
 
 using namespace std;
 
@@ -21,25 +22,38 @@ public:
 };
 
 int main() {
-   List<string> l;
-   l.append("un");
-   l.append("deux");
-   l.append("trois");
-   for (List<string>::Iterator it = l.begin(); it != l.end(); it++)
-      cout << *it << " ";
-   cout << endl;
-   
-   List<Person*> lp;
-   lp.append(new Person("Alice"));
-   lp.append(new Person("Bob"));
-   lp.append(new Person("Carla"));
-   lp.append(new Person("Damien"));
-   
-   List<Person*> lp2;
-   lp2= lp;
-   for(List<Person*>::Iterator it = lp.begin(); it != lp.end(); it++)
-      cout << (*it)->name << " ";
-   cout << endl;
+   try{
+      List<string> l;
+      l.append("un");
+      l.append("deux");
+      l.append("trois");
+      cout << "Taille : " << l.size() << endl;
+      for (List<string>::Iterator it = l.begin(); it != l.end(); it++)
+         cout << *it << " ";
+      cout << endl;
+      
+      l.remove(0);
+      cout << "Taille apres suppression : " << l.size() << endl;
+      for (List<string>::Iterator it = l.begin(); it != l.end(); it++)
+         cout << *it << " ";
+      
+      cout << endl << endl;
+      
+
+      List<Person*> lp;
+      lp.append(new Person("Alice"));
+      lp.append(new Person("Bob"));
+      lp.append(new Person("Carla"));
+      lp.append(new Person("Damien"));
+
+      List<Person*> lp2;
+      lp2= lp;
+      for(List<Person*>::Iterator it = lp.begin(); it != lp.end(); it++)
+         cout << (*it)->name << " ";
+      cout << endl;
+   } catch(const std::runtime_error& ex) {
+      cout << ex.what() << endl;
+   }
       
    return EXIT_SUCCESS;
 }
