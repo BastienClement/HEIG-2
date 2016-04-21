@@ -32,13 +32,10 @@ int main() {
          cout << *it << " ";
       cout << endl;
       
-      l.remove(0);
+      l.remove(2);
+      l.remove("deux");      
       cout << "Taille apres suppression : " << l.size() << endl;
-      for (List<string>::Iterator it = l.begin(); it != l.end(); it++)
-         cout << *it << " ";
-      
-      cout << endl << endl;
-      
+      cout << endl;
 
       List<Person*> lp;
       lp.append(new Person("Alice"));
@@ -51,6 +48,7 @@ int main() {
       for(List<Person*>::Iterator it = lp.begin(); it != lp.end(); it++)
          cout << (*it)->name << " ";
       cout << endl;
+      
    } catch(const std::runtime_error& ex) {
       cout << ex.what() << endl;
    }

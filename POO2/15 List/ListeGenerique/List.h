@@ -229,10 +229,10 @@ public:
    void remove(T o) {
       bool found = false;
       Element* current;
-      for(current = head; current->next != nullptr && current->data != o; current = current->next) {
-         if(current->data == o)
+      for(current = head; current->next != nullptr && current->data != o; current = current->next);
+      
+      if(current->data == o)
             found = true;;
-      }
       
       if(found) {
          if(current->previous == nullptr) {
