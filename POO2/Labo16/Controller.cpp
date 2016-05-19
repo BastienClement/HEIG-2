@@ -7,7 +7,7 @@
 
 Controller::Controller(const list<const Person*> persons) : _turn(0), _left("Gauche"), _right("Droite"), _boat("Bateau", &_left) {
 	for (const Person* person : persons) {
-		_left.add(person);
+		_left.add(person, true);
 	}
 }
 

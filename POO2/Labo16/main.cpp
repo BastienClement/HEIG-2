@@ -8,8 +8,8 @@
 using namespace std;
 
 int main() {
+	// Liste des personnes
 	list<const Person*> persons;
-
 	persons.push_back(new Father("pere"));
 	persons.push_back(new Mother("mere"));
 	persons.push_back(new Boy("paul"));
@@ -19,14 +19,18 @@ int main() {
 	persons.push_back(new Cop("policier"));
 	persons.push_back(new Thief("voleur"));
 
+	// Construction du controlleur
 	Controller game(persons);
 
+	// Boucle principale
 	game.showMenu();
 	game.display();
 	while (!game.finished()) {
 		game.nextTurn();
 	}
 
+	// Partie terminée
+	game.display();
 	cout << "Felicitation, vous avez termine la partie en " << game.turn() << " coups!" << endl;
 	return 0;
 }

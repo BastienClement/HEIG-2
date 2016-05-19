@@ -8,18 +8,27 @@
 #include "Person.h"
 #include "FamilyMember.h"
 
+/**
+ * Un parent
+ */
 class Parent : public FamilyMember {
 public:
 	Parent(const string& name);
 	virtual bool canDrive() const;
 };
 
+/**
+ * Le père
+ */
 class Father : public Parent {
 public:
 	Father(const string& name);
 	virtual void accept(class PersonVisitor& visitor) const;
 };
 
+/**
+ * La mère
+ */
 class Mother : public Parent {
 public:
 	Mother(const string& name);

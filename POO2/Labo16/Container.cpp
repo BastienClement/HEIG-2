@@ -48,7 +48,7 @@ void Container::remove(const Person* person, bool force) throw (ActionException)
 }
 
 void Container::moveEveryoneTo(Container& other, bool force) throw (ActionException) {
-	// Ensure that we are not moving everyone to the same container
+	// On s'assure qu'on ne déplace pas tout le monde vers soi-même
 	if (*this == other) return;
 
 	for (const Person* person : *this) {

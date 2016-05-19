@@ -7,6 +7,9 @@
 
 #include "Person.h"
 
+/**
+ * Un membre de la famille
+ */
 class FamilyMember : public Person {
 public:
 	FamilyMember(const string& name);

@@ -36,7 +36,7 @@ void Boy::validateState(const struct Container& container) const {
 	ChildVisitor visitor;
 	container.visit(visitor);
 	if (visitor.mother && !visitor.father) {
-		throw ActionException("Un garcon ne peut pas se trouver seul avec sa mère si son père n'est pas présent");
+		throw ActionException("Un garcon ne peut pas se trouver seul avec sa mere si son pere n'est pas present");
 	}
 }
 
@@ -54,6 +54,6 @@ void Girl::validateState(const struct Container& container) const {
 	ChildVisitor visitor;
 	container.visit(visitor);
 	if (visitor.father && !visitor.mother) {
-		throw ActionException("Une fille ne peut pas se trouver seule avec son père si sa mère n'est pas présente");
+		throw ActionException("Une fille ne peut pas se trouver seule avec son pere si sa mere n'est pas presente");
 	}
 }

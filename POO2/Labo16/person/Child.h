@@ -8,12 +8,18 @@
 #include "Person.h"
 #include "FamilyMember.h"
 
+/**
+ * Un enfant
+ */
 class Child : public FamilyMember {
 public:
 	Child(const string& name);
 	virtual bool canDrive() const;
 };
 
+/**
+ * Un garçon
+ */
 class Boy : public Child {
 public:
 	Boy(const string& name);
@@ -21,6 +27,9 @@ public:
 	virtual void validateState(const class Container& container) const;
 };
 
+/**
+ * Une fille
+ */
 class Girl : public Child {
 public:
 	Girl(const string& name);

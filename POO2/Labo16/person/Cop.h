@@ -7,6 +7,9 @@
 
 #include "Person.h"
 
+/**
+ * Le policier
+ */
 class Cop : public Person {
 public:
 	Cop(const string& name);

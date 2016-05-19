@@ -9,6 +9,9 @@
 
 using namespace std;
 
+/**
+ * Une exception produite suite à une action de l'utilisateur
+ */
 class ActionException {
 private:
 	const string _message;

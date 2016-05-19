@@ -7,6 +7,9 @@
 
 #include "Person.h"
 
+/**
+ * Le voleur
+ */
 class Thief : public Person {
 public:
 	Thief(const string& name);

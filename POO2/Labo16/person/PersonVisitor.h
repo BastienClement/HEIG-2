@@ -15,6 +15,13 @@ class Mother;
 class Cop;
 class Thief;
 
+/**
+ * Un visiteur de personne
+ * Les implémentations par défaut de ces méthodes ne font rien
+ *
+ * Les implémentations par défaut de Boy/Girl et Father/Mother appelent
+ * les méthodes Child et Parent, et celles-ci appellent FamilyMember
+ */
 class PersonVisitor {
 public:
 	virtual void visit(const FamilyMember&);

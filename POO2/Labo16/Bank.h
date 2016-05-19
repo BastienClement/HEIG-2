@@ -7,8 +7,10 @@
 
 #include "Container.h"
 
+/**
+ * Une rive
+ */
 class Bank : public Container {
-
 public:
 	Bank(const std::string& name);
 };
