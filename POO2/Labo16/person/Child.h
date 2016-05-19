@@ -2,7 +2,10 @@
  * File:   Child.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration des enfants
+ *
+ * Les enfants surchargent la méthode validateState pour s'assurer qu'ils
+ * ne sont pas laissés seuls avec le parent de sexe opposé.
  *
  * Created on 18.05.16.
  */

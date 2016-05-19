@@ -2,7 +2,8 @@
  * File:   PersonVisitor.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du visiteur avec des méthodes vides
+ * ou déléguant à une méthode d'un type parent.
  *
  * Created on 18.05.16.
  */

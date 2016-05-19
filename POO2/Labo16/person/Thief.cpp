@@ -2,7 +2,7 @@
  * File:   Thief.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du voleur
  *
  * Created on 18.05.16.
  */

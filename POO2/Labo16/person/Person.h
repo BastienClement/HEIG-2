@@ -2,7 +2,11 @@
  * File:   Person.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration d'une personne
+ *
+ * La personne est visitable par un PersonVisitor et réalise ainsi
+ * un Visitor Pattern. Plus de détails sur les raisons de cette
+ * implémentation sont disponibles dans le fichier PersonVisitor.h
  *
  * Created on 18.05.16.
  */

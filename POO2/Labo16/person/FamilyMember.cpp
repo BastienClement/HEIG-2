@@ -2,7 +2,7 @@
  * File:   FamilyMember.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du membre de la famille
  *
  * Created on 18.05.16.
  */

@@ -2,7 +2,7 @@
  * File:   Controller.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du controlleur
  *
  * Created on 18.05.16.
  */

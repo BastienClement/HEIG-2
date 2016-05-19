@@ -2,7 +2,7 @@
  * File:   Parent.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation des parents
  *
  * Created on 18.05.16.
  */

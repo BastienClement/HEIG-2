@@ -2,7 +2,7 @@
  * File:   Boat.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du bateau
  *
  * Created on 18.05.16.
  */

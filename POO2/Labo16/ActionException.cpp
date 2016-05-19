@@ -2,7 +2,7 @@
  * File:   ActionException.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation de l'exception personnalisée
  *
  * Created on 18.05.16.
  */

@@ -2,7 +2,12 @@
  * File:   Bank.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration d'une rive
+ *
+ * Cette classe ne fait rien de plus que Container, mais permet de
+ * distinguer une rive d'un bateau au niveau des types. Il n'est par
+ * exemple pas possible de déplacer un bateau vers un bateau plutôt
+ * qu'une rive.
  *
  * Created on 18.05.16.
  */

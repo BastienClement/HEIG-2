@@ -2,7 +2,7 @@
  * File:   main.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Fonction principale du jeu, défini la liste des personnes et pilote le controlleur
  *
  * Created on 18.05.16.
  */

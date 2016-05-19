@@ -2,7 +2,11 @@
  * File:   Boat.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration du bateau
+ *
+ * En plus des méthodes du container, le bateau gère une capacité maximale
+ * et sa rive actuelle. De plus, il ne peut être déplacé que si une personne
+ * qu'il contient est en mesure de le piloter.
  *
  * Created on 18.05.16.
  */

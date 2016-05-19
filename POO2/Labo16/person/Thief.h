@@ -2,7 +2,10 @@
  * File:   Thief.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration du voleur
+ *
+ * Le voleur surcharge la méthode validateState pour s'assurer de ne pas
+ * rester avec un membre de la famille sans le policier.
  *
  * Created on 18.05.16.
  */

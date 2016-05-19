@@ -2,7 +2,7 @@
  * File:   Person.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation d'une personne
  *
  * Created on 18.05.16.
  */

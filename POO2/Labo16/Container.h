@@ -2,7 +2,14 @@
  * File:   Container.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration d'un container de personnes
+ *
+ * Un container est utilisé comme classe de base pour les rives et le bateau.
+ * À chaque opération d'ajout / suppression de personnes, le container valide
+ * l'état courant auprès des occupants de l'emplacement.
+ *
+ * Si l'état final est incohérent, une exception est levée et l'action est annulée.
+ * Le container ne peut pas être dans un état incohérent après le retour de add/remove
  *
  * Created on 18.05.16.
  */

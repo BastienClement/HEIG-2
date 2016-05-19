@@ -2,7 +2,11 @@
  * File:   Child.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation des enfants
+ *
+ * Ce fichier défini une classe "privée" ChildVisitor utilisée à
+ * la fois par le garçon et la fille. En effet, la logique est la
+ * même, et seul la vérification finale est différente.
  *
  * Created on 18.05.16.
  */

@@ -2,7 +2,7 @@
  * File:   Parent.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration des parents
  *
  * Created on 18.05.16.
  */

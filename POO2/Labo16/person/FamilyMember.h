@@ -2,7 +2,10 @@
  * File:   FamilyMember.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration d'un membre de la famille
+ *
+ * Cette classe est utilisée par le voleur pour gérer de façon
+ * unifiée tous les membres de la famille.
  *
  * Created on 18.05.16.
  */

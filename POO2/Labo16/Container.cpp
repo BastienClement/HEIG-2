@@ -2,7 +2,7 @@
  * File:   Container.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du container
  *
  * Created on 18.05.16.
  */

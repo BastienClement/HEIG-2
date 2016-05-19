@@ -2,7 +2,7 @@
  * File:   Bank.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: "Implémentation" d'une rive
  *
  * Created on 18.05.16.
  */

@@ -2,7 +2,14 @@
  * File:   PersonVisitor.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration d'un visiteur de personne
+ *
+ * L'utilisation du visiteur pattern implémente le "double dispatch"
+ * capable de résoudre les méthodes surchargée en fonction du type des
+ * arguments à l'exécution.
+ *
+ * En d'autre mot, il est utile pour distinguer un Boy d'une Girl, lorsque
+ * tout deux sont vus en tant que Person.
  *
  * Created on 18.05.16.
  */

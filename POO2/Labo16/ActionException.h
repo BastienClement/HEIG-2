@@ -2,7 +2,8 @@
  * File:   ActionException.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Classe d'exception lancée lorsqu'une action de l'utilisateur
+ * a laissé le jeu dans un état incohérent.
  *
  * Created on 18.05.16.
  */

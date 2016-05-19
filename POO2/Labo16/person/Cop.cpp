@@ -2,7 +2,7 @@
  * File:   Cop.cpp
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Implémentation du policier
  *
  * Created on 18.05.16.
  */

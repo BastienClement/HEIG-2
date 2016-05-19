@@ -2,7 +2,11 @@
  * File:   Controller.h
  * Author: Bastien Clément & Alain Hardy
  * 
- * Goal: 
+ * Goal: Déclaration du controlleur du jeu
+ *
+ * Le controlleur est responsable de la lecture des entrées et de l'exécution
+ * des commandes du l'utilisateur. Il s'assure de la conservation d'un état
+ * cohérent tout au long de la partie.
  *
  * Created on 18.05.16.
  */
