@@ -14,8 +14,8 @@ using namespace std;
 
 class Container : public Util::IdentityEquality<Container> {
 public:
-	using list = std::list<const class Person*>;
-	using iterator = list::const_iterator;
+	typedef std::list<const class Person*> list;
+	typedef list::const_iterator iterator;
 
 private:
 	const std::string _name;
