@@ -5,7 +5,7 @@
 #ifndef LABO16_PERSON_H
 #define LABO16_PERSON_H
 
-#import <string>
+#include <string>
 #include "../Util.h"
 
 using namespace std;

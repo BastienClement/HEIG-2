@@ -2,6 +2,7 @@
 // Created by Bastien Clément on 18.05.16.
 //
 
+#include <cstdlib>
 #include "Controller.h"
 
 Controller::Controller(const list<const Person*> persons) : _turn(0), _left("Gauche"), _right("Droite"), _boat("Bateau", &_left) {

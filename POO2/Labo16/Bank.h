@@ -5,7 +5,6 @@
 #ifndef LABO16_BANK_H
 #define LABO16_BANK_H
 
-
 #include "Container.h"
 
 class Bank : public Container {
