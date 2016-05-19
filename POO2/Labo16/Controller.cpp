@@ -62,7 +62,7 @@ void Controller::nextTurn() {
 		string line;
 		getline(cin, line);
 
-		if (line.length() < 1) {
+		if (line.length() < 1 || (line.length() > 1 && line[1] != ' ')) {
 			showMenu();
 			continue;
 		}
