@@ -1,3 +1,12 @@
+/* 
+ * File:   main.cpp
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
+
 #include <iostream>
 #include "Controller.h"
 #include "person/Child.h"

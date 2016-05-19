@@ -1,6 +1,11 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   Person.h
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
 
 #ifndef LABO16_PERSON_H
 #define LABO16_PERSON_H

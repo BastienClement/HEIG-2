@@ -1,6 +1,11 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   Thief.cpp
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
 
 #ifndef LABO16_THIEF_H
 #define LABO16_THIEF_H

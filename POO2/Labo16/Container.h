@@ -1,6 +1,11 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   Container.h
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
 
 #ifndef LABO16_CONTAINER_H
 #define LABO16_CONTAINER_H

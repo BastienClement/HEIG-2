@@ -1,6 +1,12 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   Child.cpp
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
+
 
 #include "Child.h"
 #include "PersonVisitor.h"

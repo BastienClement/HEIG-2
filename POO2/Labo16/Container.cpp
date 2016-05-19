@@ -1,6 +1,11 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   Container.cpp
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
 
 #include "Container.h"
 #include "person/PersonVisitor.h"

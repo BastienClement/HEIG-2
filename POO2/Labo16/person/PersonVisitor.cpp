@@ -1,6 +1,11 @@
-//
-// Created by Bastien Clément on 18.05.16.
-//
+/* 
+ * File:   PersonVisitor.cpp
+ * Author: Bastien Clément & Alain Hardy
+ * 
+ * Goal: 
+ *
+ * Created on 18.05.16.
+ */
 
 #include "PersonVisitor.h"
 
