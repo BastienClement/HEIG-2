@@ -25,7 +25,7 @@ void Container::validate(Function rollback) {
 	}
 }
 
-const Person* Container::find(string name) const {
+const Person* Container::find(const string& name) const {
 	for (const Person* person : *this) {
 		if (person->name() == name) return person;
 	}

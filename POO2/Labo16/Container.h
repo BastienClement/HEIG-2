@@ -51,7 +51,7 @@ public:
 	Container(const string& name);
 
 	/** Trouve la personne avec un nom donné */
-	const Person* find(string name) const;
+	const Person* find(const string& name) const;
 
 	/** Indique si le container est vide */
 	bool empty() const;
